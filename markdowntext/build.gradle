@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
+    id 'maven-publish'
 }
 
 android {
@@ -57,4 +58,18 @@ dependencies {
     // Jetpack Compose
     implementation 'androidx.compose.ui:ui:1.0.0-beta01'
     implementation 'androidx.compose.material:material:1.0.0-beta01'
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+
+                groupId = 'dev.jeziellago'
+                artifactId = 'compose-markdown'
+                version = '0.1.0'
+            }
+        }
+    }
 }
