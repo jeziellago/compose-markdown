@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import dev.jeziellago.compose.markdowntext.MarkdownText
 
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity() {
                 modifier = Modifier.padding(8.dp)
             ) {
 
-                MarkdownText(markdown = markdownContent)
+                MarkdownText(markdown = markdownContent, fontResource = R.font.opensans_regular)
             }
         }
     }
