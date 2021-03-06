@@ -38,6 +38,19 @@ fun ExampleContent() {
 }  
 ```  
 
+# Supported attributes
+
+Most of the attributes of that a default `Text` composable has are also supported by `MarkdownText`. 
+
+- textColor 
+- fontSize 
+- letterSpacing 
+- textAlign
+- maxLines
+- style (only styles for supported attributes is applied)
+
+The font can be changed by passing a font xml resource as `fontResource` parameter. 
+
 # License
 ```  
 Copyright (c) 2021 Jeziel Lago  
