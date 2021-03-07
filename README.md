@@ -1,4 +1,7 @@
 # MarkdownText - Jetpack Compose
+[![](https://androidweekly.net/issues/issue-456/badge)](https://androidweekly.net/issues/issue-456)
+[![Android CI](https://github.com/jeziellago/compose-markdown/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/jeziellago/compose-markdown/actions/workflows/ci.yml)
+
 ![](example.png)
 - Markdown
 - HTML
