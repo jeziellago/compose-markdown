@@ -43,8 +43,7 @@ fun ExampleContent() {
 Most of the attributes of that a default `Text` composable has are also supported by `MarkdownText`. 
 
 - textColor 
-- fontSize 
-- letterSpacing 
+- fontSize
 - textAlign
 - maxLines
 - style (only styles for supported attributes is applied)
