@@ -24,7 +24,20 @@ Add dependency into `build.gradle`:
 dependencies {  
     implementation 'com.github.jeziellago:compose-markdown:0.1.0'  
 }  
-```  
+```
+
+# Supported attributes
+
+Most of the attributes of that a default `Text` composable has are also supported by `MarkdownText`. 
+
+- color 
+- fontSize
+- textAlign
+- maxLines
+- style (only styling for supported attributes is applied)
+
+The font can be changed by passing a font xml resource as `fontResource` parameter. 
+
 ## How to use
 ```kotlin  
 val markdown = """  
@@ -35,23 +48,28 @@ val markdown = """
 	<a href="https://www.google.com/">Google</a>  
 """
 
+//Minimal example
 @Composable  
-fun ExampleContent() {  
+fun MinimalExampleContent() {  
     MarkdownText(markdown = markdownContent)  
+} 
+
+//Complex example
+@Composable  
+fun ComplexExampleContent() {  
+     MarkdownText(
+                modifier = Modifier.padding(8.dp),
+                markdown = markdown,
+                textAlign = TextAlign.Center,
+                fontSize = 12.sp,
+                color = LocalContentColor.current,
+                maxLines = 3,
+                fontResource = R.font.montserrat_medium,
+                style = MaterialTheme.typography.overline,
+              
+     )  
 }  
 ```  
-
-# Supported attributes
-
-Most of the attributes of that a default `Text` composable has are also supported by `MarkdownText`. 
-
-- textColor 
-- fontSize
-- textAlign
-- maxLines
-- style (only styles for supported attributes is applied)
-
-The font can be changed by passing a font xml resource as `fontResource` parameter. 
 
 # License
 ```  
