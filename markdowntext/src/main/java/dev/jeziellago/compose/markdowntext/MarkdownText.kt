@@ -35,7 +35,6 @@ fun MarkdownText(
     modifier: Modifier = Modifier,
     color: Color = Color.Unspecified,
     fontSize: TextUnit = TextUnit.Unspecified,
-    letterSpacing: TextUnit = TextUnit.Unspecified,
     textAlign: TextAlign? = null,
     maxLines: Int = Int.MAX_VALUE,
     @FontRes fontResource: Int? = null,
@@ -51,7 +50,6 @@ fun MarkdownText(
             color = textColor,
             fontSize = fontSize,
             textAlign = textAlign,
-            letterSpacing = letterSpacing
         )
     )
 
@@ -61,17 +59,13 @@ fun MarkdownText(
         setTextColor(textColor.toArgb())
         setMaxLines(maxLines)
         setTextSize(TypedValue.COMPLEX_UNIT_DIP, mergedStyle.fontSize.value)
-        if(mergedStyle.letterSpacing.type != TextUnitType.Unspecified) setLetterSpacing(mergedStyle.letterSpacing.value)
         when (textAlign) {
-            TextAlign.Left -> View.TEXT_ALIGNMENT_TEXT_START
-            TextAlign.Right -> View.TEXT_ALIGNMENT_TEXT_END
+            TextAlign.Left, TextAlign.Start -> View.TEXT_ALIGNMENT_TEXT_START
+            TextAlign.Right, TextAlign.End -> View.TEXT_ALIGNMENT_TEXT_END
             TextAlign.Center -> View.TEXT_ALIGNMENT_CENTER
-            TextAlign.Justify -> null
-            TextAlign.Start -> View.TEXT_ALIGNMENT_TEXT_START
-            TextAlign.End -> View.TEXT_ALIGNMENT_TEXT_END
-            null -> null
-        }?.let {
-            textAlignment = it
+            else -> null
+        }?.let { align ->
+            textAlignment = align
         }
         if (fontResource != null) {
             val typeface = ResourcesCompat.getFont(context, fontResource)
