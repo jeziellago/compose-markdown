@@ -66,9 +66,9 @@ afterEvaluate {
             release(MavenPublication) {
                 from components.release
 
-                groupId = 'com.luminarlab.ui'
+                groupId = 'dev.jeziellago'
                 artifactId = 'compose-markdown'
-                version = '1.0.0-alpha01'
+                version = '0.1.0'
             }
         }
     }
