@@ -22,7 +22,7 @@ allprojects {
 Add dependency into `build.gradle`:
 ```groovy  
 dependencies {  
-    implementation 'com.github.jeziellago:compose-markdown:0.1.0'  
+    implementation 'com.github.jeziellago:compose-markdown:TAG'  
 }  
 ```
 
