@@ -36,8 +36,8 @@ android {
         useIR = true
     }
     composeOptions {
-        kotlinCompilerVersion '1.4.30'
-        kotlinCompilerExtensionVersion '1.0.0-beta01'
+        kotlinCompilerVersion '1.4.31'
+        kotlinCompilerExtensionVersion '1.0.0-beta02'
     }
 }
 
@@ -56,8 +56,8 @@ dependencies {
     implementation"io.noties.markwon:linkify:$markwon_version"
 
     // Jetpack Compose
-    implementation 'androidx.compose.ui:ui:1.0.0-beta01'
-    implementation 'androidx.compose.material:material:1.0.0-beta01'
+    implementation 'androidx.compose.ui:ui:1.0.0-beta02'
+    implementation 'androidx.compose.material:material:1.0.0-beta02'
 }
 
 afterEvaluate {
@@ -68,7 +68,7 @@ afterEvaluate {
 
                 groupId = 'dev.jeziellago'
                 artifactId = 'compose-markdown'
-                version = '0.1.0'
+                version = '0.2.0'
             }
         }
     }
