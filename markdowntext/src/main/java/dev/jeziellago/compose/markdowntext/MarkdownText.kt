@@ -5,6 +5,7 @@ import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
 import androidx.annotation.FontRes
+import androidx.annotation.IdRes
 import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.LocalTextStyle
@@ -38,7 +39,8 @@ fun MarkdownText(
     textAlign: TextAlign? = null,
     maxLines: Int = Int.MAX_VALUE,
     @FontRes fontResource: Int? = null,
-    style: TextStyle = LocalTextStyle.current
+    style: TextStyle = LocalTextStyle.current,
+    @IdRes viewId: Int? = null
 ) {
     val textColor = color.takeOrElse {
         style.color.takeOrElse {
@@ -59,6 +61,9 @@ fun MarkdownText(
         setTextColor(textColor.toArgb())
         setMaxLines(maxLines)
         setTextSize(TypedValue.COMPLEX_UNIT_DIP, mergedStyle.fontSize.value)
+        viewId?.let{
+            setId(viewId)
+        }
         when (textAlign) {
             TextAlign.Left, TextAlign.Start -> View.TEXT_ALIGNMENT_TEXT_START
             TextAlign.Right, TextAlign.End -> View.TEXT_ALIGNMENT_TEXT_END
