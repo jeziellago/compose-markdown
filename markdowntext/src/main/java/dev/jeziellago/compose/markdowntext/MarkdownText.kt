@@ -19,7 +19,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.res.ResourcesCompat
 import coil.ImageLoader
@@ -55,44 +54,43 @@ fun MarkdownText(
         )
     )
 
-    val context = LocalContext.current
-    val markdownRender = remember { createMarkdownRender(context) }
     val markdownText = TextView(LocalContext.current).apply {
+
         setTextColor(textColor.toArgb())
         setMaxLines(maxLines)
         setTextSize(TypedValue.COMPLEX_UNIT_DIP, mergedStyle.fontSize.value)
-        viewId?.let{
-            setId(viewId)
-        }
-        when (textAlign) {
-            TextAlign.Left, TextAlign.Start -> View.TEXT_ALIGNMENT_TEXT_START
-            TextAlign.Right, TextAlign.End -> View.TEXT_ALIGNMENT_TEXT_END
-            TextAlign.Center -> View.TEXT_ALIGNMENT_CENTER
-            else -> null
-        }?.let { align ->
-            textAlignment = align
-        }
-        if (fontResource != null) {
-            val typeface = ResourcesCompat.getFont(context, fontResource)
-            setTypeface(typeface)
+
+        viewId?.let { id = viewId }
+        textAlign?.let { align ->
+            textAlignment = when (align) {
+                TextAlign.Left, TextAlign.Start -> View.TEXT_ALIGNMENT_TEXT_START
+                TextAlign.Right, TextAlign.End -> View.TEXT_ALIGNMENT_TEXT_END
+                TextAlign.Center -> View.TEXT_ALIGNMENT_CENTER
+                else -> View.TEXT_ALIGNMENT_TEXT_START
+            }
         }
 
-
+        fontResource?.let { font ->
+            typeface = ResourcesCompat.getFont(context, font)
+        }
     }
 
     AndroidView(modifier = modifier, factory = { markdownText })
+
+    val context = LocalContext.current
+    val markdownRender = remember { createMarkdownRender(context) }
     markdownRender.setMarkdown(markdownText, markdown)
 }
 
+private const val IMAGE_MEMORY_PERCENTAGE = 0.5
 
 private fun createMarkdownRender(context: Context): Markwon {
     val imageLoader = ImageLoader.Builder(context)
         .apply {
-            availableMemoryPercentage(0.5)
-            bitmapPoolPercentage(0.5)
+            availableMemoryPercentage(IMAGE_MEMORY_PERCENTAGE)
+            bitmapPoolPercentage(IMAGE_MEMORY_PERCENTAGE)
             crossfade(true)
-        }
-        .build()
+        }.build()
 
     return Markwon.builder(context)
         .usePlugin(HtmlPlugin.create())
