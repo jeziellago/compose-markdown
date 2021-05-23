@@ -11,8 +11,6 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -36,15 +34,14 @@ android {
         useIR = true
     }
     composeOptions {
-        kotlinCompilerVersion '1.4.32'
-        kotlinCompilerExtensionVersion '1.0.0-beta06'
+        kotlinCompilerExtensionVersion '1.0.0-beta07'
     }
 }
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.3.2'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.core:core-ktx:1.5.0'
+    implementation 'androidx.appcompat:appcompat:1.3.0'
 
     final def markwon_version = '4.6.2'
 
@@ -56,7 +53,6 @@ dependencies {
     implementation"io.noties.markwon:linkify:$markwon_version"
 
     // Jetpack Compose
-    final def compose_version = "1.0.0-beta06"
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.material:material:$compose_version"
 }
@@ -69,7 +65,7 @@ afterEvaluate {
 
                 groupId = 'dev.jeziellago'
                 artifactId = 'compose-markdown'
-                version = '0.2.1'
+                version = '0.2.2'
             }
         }
     }
