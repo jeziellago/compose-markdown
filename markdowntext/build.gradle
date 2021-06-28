@@ -34,7 +34,7 @@ android {
         useIR = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion '1.0.0-beta07'
+        kotlinCompilerExtensionVersion compose_version
     }
 }
 
@@ -65,7 +65,7 @@ afterEvaluate {
 
                 groupId = 'dev.jeziellago'
                 artifactId = 'compose-markdown'
-                version = '0.2.2'
+                version = library_version
             }
         }
     }
