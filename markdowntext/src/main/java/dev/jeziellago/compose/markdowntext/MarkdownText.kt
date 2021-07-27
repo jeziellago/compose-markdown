@@ -41,11 +41,45 @@ fun MarkdownText(
     style: TextStyle = LocalTextStyle.current,
     @IdRes viewId: Int? = null
 ) {
-    val textColor = color.takeOrElse {
-        style.color.takeOrElse {
-            LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
+    val defaultColor: Color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
+    val context: Context = LocalContext.current
+    val markdownRender: Markwon = remember { createMarkdownRender(context) }
+    AndroidView(
+        modifier = modifier,
+        factory = { ctx ->
+            createTextView(
+                context = ctx,
+                color = color,
+                defaultColor = defaultColor,
+                fontSize = fontSize,
+                fontResource = fontResource,
+                maxLines = maxLines,
+                style = style,
+                textAlign = textAlign,
+                viewId = viewId
+            )
+        },
+        update = { textView ->
+            markdownRender.setMarkdown(textView, markdown)
         }
-    }
+    )
+}
+
+private const val IMAGE_MEMORY_PERCENTAGE = 0.5
+
+private fun createTextView(
+    context: Context,
+    color: Color = Color.Unspecified,
+    defaultColor: Color,
+    fontSize: TextUnit = TextUnit.Unspecified,
+    textAlign: TextAlign? = null,
+    maxLines: Int = Int.MAX_VALUE,
+    @FontRes fontResource: Int? = null,
+    style: TextStyle,
+    @IdRes viewId: Int? = null
+): TextView {
+
+    val textColor = color.takeOrElse { style.color.takeOrElse { defaultColor } }
     val mergedStyle = style.merge(
         TextStyle(
             color = textColor,
@@ -53,8 +87,7 @@ fun MarkdownText(
             textAlign = textAlign,
         )
     )
-
-    val markdownText = TextView(LocalContext.current).apply {
+    return TextView(context).apply {
 
         setTextColor(textColor.toArgb())
         setMaxLines(maxLines)
@@ -74,15 +107,7 @@ fun MarkdownText(
             typeface = ResourcesCompat.getFont(context, font)
         }
     }
-
-    AndroidView(modifier = modifier, factory = { markdownText })
-
-    val context = LocalContext.current
-    val markdownRender = remember { createMarkdownRender(context) }
-    markdownRender.setMarkdown(markdownText, markdown)
 }
-
-private const val IMAGE_MEMORY_PERCENTAGE = 0.5
 
 private fun createMarkdownRender(context: Context): Markwon {
     val imageLoader = ImageLoader.Builder(context)

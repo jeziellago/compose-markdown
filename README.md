@@ -2,7 +2,7 @@
 [![](https://androidweekly.net/issues/issue-456/badge)](https://androidweekly.net/issues/issue-456)
 [![Android CI](https://github.com/jeziellago/compose-markdown/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/jeziellago/compose-markdown/actions/workflows/ci.yml)
 
-![](example.png)
+[![Video]()](demo.mp4)
 - Markdown
 - HTML
 - Image
