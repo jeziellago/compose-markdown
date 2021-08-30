@@ -1,13 +1,13 @@
 buildscript {
-    ext.compose_version = "1.0.0"
-    ext.library_version = "0.2.5"
-    ext.kotlin_version = "1.5.10"
+    ext.compose_version = "1.0.1"
+    ext.library_version = "0.2.6"
+    ext.kotlin_version = "1.5.21"
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.1.0-alpha05'
+        classpath 'com.android.tools.build:gradle:7.1.0-alpha10'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
