@@ -10,20 +10,26 @@
 - Linkfy
 - Table
 ## Setup
-Configure root `build.gradle`:
-```  
-allprojects {  
-    repositories {  
-        ...  
-        maven { url 'https://jitpack.io' }  
-    }  
-}  
-```  
-Add dependency into `build.gradle`:
-```groovy  
-dependencies {  
-    implementation 'com.github.jeziellago:compose-markdown:TAG'  
-}  
+1. Open the file `settings.gradle` (it looks like that)
+```groovy
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        // add jitpack here 👇🏽
+        maven { url 'https://jitpack.io' }
+       ...
+    }
+} 
+...
+```
+2. Sync the project
+3. Add `compose-markdown` dependency
+```groovy
+dependencies {
+        implementation 'com.github.jeziellago:compose-markdown:0.2.6'
+}
 ```
 
 # Supported attributes
