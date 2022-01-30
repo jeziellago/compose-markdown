@@ -1,6 +1,7 @@
 package dev.jeziellago.compose.markdown
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,7 +31,9 @@ class MainActivity : AppCompatActivity() {
                 modifier = Modifier.padding(8.dp)
             ) {
                 item {
-                    MarkdownText(markdown = demo, viewId = R.id.markdownTextId)
+                    MarkdownText(markdown = demo, viewId = R.id.markdownTextId, onClick = {
+                        Log.i("MarkdownViewSample", "click on view")
+                    })
                 }
             }
         }
