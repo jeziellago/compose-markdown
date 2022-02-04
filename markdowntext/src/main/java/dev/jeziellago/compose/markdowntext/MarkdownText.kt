@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.annotation.FontRes
 import androidx.annotation.IdRes
+import androidx.compose.foundation.clickable
 import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.LocalTextStyle
@@ -39,7 +40,8 @@ fun MarkdownText(
     maxLines: Int = Int.MAX_VALUE,
     @FontRes fontResource: Int? = null,
     style: TextStyle = LocalTextStyle.current,
-    @IdRes viewId: Int? = null
+    @IdRes viewId: Int? = null,
+    onClick: () -> Unit = {},
 ) {
     val defaultColor: Color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
     val context: Context = LocalContext.current
@@ -56,7 +58,8 @@ fun MarkdownText(
                 maxLines = maxLines,
                 style = style,
                 textAlign = textAlign,
-                viewId = viewId
+                viewId = viewId,
+                onClick = onClick,
             )
         },
         update = { textView ->
@@ -76,7 +79,8 @@ private fun createTextView(
     maxLines: Int = Int.MAX_VALUE,
     @FontRes fontResource: Int? = null,
     style: TextStyle,
-    @IdRes viewId: Int? = null
+    @IdRes viewId: Int? = null,
+    onClick: () -> Unit = {}
 ): TextView {
 
     val textColor = color.takeOrElse { style.color.takeOrElse { defaultColor } }
@@ -88,7 +92,7 @@ private fun createTextView(
         )
     )
     return TextView(context).apply {
-
+        setOnClickListener { onClick() }
         setTextColor(textColor.toArgb())
         setMaxLines(maxLines)
         setTextSize(TypedValue.COMPLEX_UNIT_DIP, mergedStyle.fontSize.value)
