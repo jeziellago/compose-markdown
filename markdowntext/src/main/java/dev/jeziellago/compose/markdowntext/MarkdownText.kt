@@ -92,7 +92,7 @@ private fun createTextView(
         )
     )
     return TextView(context).apply {
-        this.setOnClickListener { onClick() }
+       setOnClickListener { onClick() }
         setTextColor(textColor.toArgb())
         setMaxLines(maxLines)
         setTextSize(TypedValue.COMPLEX_UNIT_DIP, mergedStyle.fontSize.value)
