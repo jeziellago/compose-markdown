@@ -1,7 +1,7 @@
 package dev.jeziellago.compose.markdown
 
 import android.os.Bundle
-import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
             ) {
                 item {
                     MarkdownText(markdown = demo, viewId = R.id.markdownTextId, onClick = {
-                        Log.i("MarkdownViewSample", "click on view")
+                        Toast.makeText(this@MainActivity, "On text click", Toast.LENGTH_SHORT).show()
                     })
                 }
             }
