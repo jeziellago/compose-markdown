@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -28,12 +29,21 @@ class MainActivity : AppCompatActivity() {
             elevation = 10.dp
         ) {
             LazyColumn(
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier
+                    .padding(8.dp)
+                    .clickable {
+                        Toast
+                            .makeText(this@MainActivity, "On text click", Toast.LENGTH_SHORT)
+                            .show()
+                    },
             ) {
                 item {
-                    MarkdownText(markdown = demo, viewId = R.id.markdownTextId, onClick = {
-                        Toast.makeText(this@MainActivity, "On text click", Toast.LENGTH_SHORT).show()
-                    })
+                    MarkdownText(
+                        markdown = demo,
+                        viewId =
+                        R.id.markdownTextId,
+                        disableLinkMovementMethod = true
+                    )
                 }
             }
         }
