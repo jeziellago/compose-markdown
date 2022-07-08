@@ -73,8 +73,6 @@ fun MarkdownText(
     )
 }
 
-private const val IMAGE_MEMORY_PERCENTAGE = 0.5
-
 private fun createTextView(
     context: Context,
     color: Color = Color.Unspecified,
@@ -121,8 +119,6 @@ private fun createTextView(
 private fun createMarkdownRender(context: Context): Markwon {
     val imageLoader = ImageLoader.Builder(context)
         .apply {
-            availableMemoryPercentage(IMAGE_MEMORY_PERCENTAGE)
-            bitmapPoolPercentage(IMAGE_MEMORY_PERCENTAGE)
             crossfade(true)
         }.build()
 
