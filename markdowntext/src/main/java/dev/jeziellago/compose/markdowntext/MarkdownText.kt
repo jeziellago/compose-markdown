@@ -91,7 +91,7 @@ private fun createTextView(
     val mergedStyle = style.merge(
         TextStyle(
             color = textColor,
-            fontSize = fontSize,
+            fontSize = if (fontSize != TextUnit.Unspecified) fontSize else style.fontSize,
             textAlign = textAlign,
         )
     )
