@@ -44,10 +44,11 @@ fun MarkdownText(
     // this option will disable all clicks on links, inside the markdown text
     // it also enable the parent view to receive the click event
     disableLinkMovementMethod: Boolean = false,
+    imageLoader: ImageLoader? = null,
 ) {
     val defaultColor: Color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
     val context: Context = LocalContext.current
-    val markdownRender: Markwon = remember { createMarkdownRender(context) }
+    val markdownRender: Markwon = remember { createMarkdownRender(context, imageLoader) }
     AndroidView(
         modifier = modifier,
         factory = { ctx ->
@@ -116,15 +117,15 @@ private fun createTextView(
     }
 }
 
-private fun createMarkdownRender(context: Context): Markwon {
-    val imageLoader = ImageLoader.Builder(context)
+private fun createMarkdownRender(context: Context, imageLoader: ImageLoader?): Markwon {
+    val coilImageLoader = imageLoader ?: ImageLoader.Builder(context)
         .apply {
             crossfade(true)
         }.build()
 
     return Markwon.builder(context)
         .usePlugin(HtmlPlugin.create())
-        .usePlugin(CoilImagesPlugin.create(context, imageLoader))
+        .usePlugin(CoilImagesPlugin.create(context, coilImageLoader))
         .usePlugin(StrikethroughPlugin.create())
         .usePlugin(TablePlugin.create(context))
         .usePlugin(LinkifyPlugin.create())

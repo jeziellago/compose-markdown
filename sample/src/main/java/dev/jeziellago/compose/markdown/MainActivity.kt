@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
                         markdown = demo,
                         viewId =
                         R.id.markdownTextId,
-                        disableLinkMovementMethod = true
+                        disableLinkMovementMethod = false
                     )
                 }
             }

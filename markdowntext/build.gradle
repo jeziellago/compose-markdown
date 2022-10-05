@@ -5,12 +5,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 32
+        targetSdkVersion 33
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -31,10 +31,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
-        useIR = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion compose_version
+        kotlinCompilerExtensionVersion '1.2.0'
     }
 }
 
@@ -45,12 +44,15 @@ dependencies {
 
     final def markwon_version = '4.6.2'
 
-    implementation"io.noties.markwon:core:$markwon_version"
-    implementation"io.noties.markwon:ext-strikethrough:$markwon_version"
-    implementation"io.noties.markwon:ext-tables:$markwon_version"
-    implementation"io.noties.markwon:html:$markwon_version"
-    implementation"io.noties.markwon:image-coil:$markwon_version"
-    implementation"io.noties.markwon:linkify:$markwon_version"
+    implementation "io.noties.markwon:core:$markwon_version"
+    implementation "io.noties.markwon:ext-strikethrough:$markwon_version"
+    implementation "io.noties.markwon:ext-tables:$markwon_version"
+    implementation "io.noties.markwon:html:$markwon_version"
+//    implementation"io.noties.markwon:image-coil:$markwon_version"
+    implementation ("com.github.jeziellago:Markwon:106f7687ca") {
+        exclude group: 'io.noties.markwon', module: 'markwon-core'
+    }
+    implementation "io.noties.markwon:linkify:$markwon_version"
 
     // Jetpack Compose
     implementation "androidx.compose.ui:ui:$compose_version"
