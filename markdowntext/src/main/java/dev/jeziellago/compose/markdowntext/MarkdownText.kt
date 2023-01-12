@@ -140,7 +140,7 @@ private fun createMarkdownRender(
             override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {
                 builder.linkResolver { view, link ->
                     // handle individual clicks on Textview link
-                    linkUrl?.let {  linkUrl(link) }
+                    onLinkClicked?.invoke(link)
                 }
             }
         })
