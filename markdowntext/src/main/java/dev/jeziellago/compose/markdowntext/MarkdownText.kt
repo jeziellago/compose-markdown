@@ -47,7 +47,7 @@ fun MarkdownText(
     // it also enable the parent view to receive the click event
     disableLinkMovementMethod: Boolean = false,
     imageLoader: ImageLoader? = null,
-    linkUrl: ((String) -> Unit)? = null
+    onLinkClicked: ((String) -> Unit)? = null
 ) {
     val defaultColor: Color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
     val context: Context = LocalContext.current
