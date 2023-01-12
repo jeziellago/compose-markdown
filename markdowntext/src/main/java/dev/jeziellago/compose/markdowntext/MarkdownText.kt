@@ -51,7 +51,7 @@ fun MarkdownText(
 ) {
     val defaultColor: Color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
     val context: Context = LocalContext.current
-    val markdownRender: Markwon = remember { createMarkdownRender(context, imageLoader,linkUrl) }
+    val markdownRender: Markwon = remember { createMarkdownRender(context, imageLoader, onLinkClicked) }
     AndroidView(
         modifier = modifier,
         factory = { ctx ->
