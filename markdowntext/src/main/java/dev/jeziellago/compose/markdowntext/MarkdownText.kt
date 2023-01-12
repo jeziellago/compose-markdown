@@ -123,7 +123,7 @@ private fun createTextView(
 private fun createMarkdownRender(
     context: Context,
     imageLoader: ImageLoader?,
-    linkUrl:((String) -> Unit)? = null
+    onLinkClicked: ((String) -> Unit)? = null
 ): Markwon {
     val coilImageLoader = imageLoader ?: ImageLoader.Builder(context)
         .apply {
