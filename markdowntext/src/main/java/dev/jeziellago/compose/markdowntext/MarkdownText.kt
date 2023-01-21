@@ -22,7 +22,9 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.res.ResourcesCompat
 import coil.ImageLoader
+import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
+import io.noties.markwon.MarkwonConfiguration
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
 import io.noties.markwon.ext.tables.TablePlugin
 import io.noties.markwon.html.HtmlPlugin
@@ -45,10 +47,11 @@ fun MarkdownText(
     // it also enable the parent view to receive the click event
     disableLinkMovementMethod: Boolean = false,
     imageLoader: ImageLoader? = null,
+    onLinkClicked: ((String) -> Unit)? = null
 ) {
     val defaultColor: Color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
     val context: Context = LocalContext.current
-    val markdownRender: Markwon = remember { createMarkdownRender(context, imageLoader) }
+    val markdownRender: Markwon = remember { createMarkdownRender(context, imageLoader, onLinkClicked) }
     AndroidView(
         modifier = modifier,
         factory = { ctx ->
@@ -117,7 +120,11 @@ private fun createTextView(
     }
 }
 
-private fun createMarkdownRender(context: Context, imageLoader: ImageLoader?): Markwon {
+private fun createMarkdownRender(
+    context: Context,
+    imageLoader: ImageLoader?,
+    onLinkClicked: ((String) -> Unit)? = null
+): Markwon {
     val coilImageLoader = imageLoader ?: ImageLoader.Builder(context)
         .apply {
             crossfade(true)
@@ -129,5 +136,13 @@ private fun createMarkdownRender(context: Context, imageLoader: ImageLoader?): M
         .usePlugin(StrikethroughPlugin.create())
         .usePlugin(TablePlugin.create(context))
         .usePlugin(LinkifyPlugin.create())
+        .usePlugin(object: AbstractMarkwonPlugin() {
+            override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {
+                builder.linkResolver { view, link ->
+                    // handle individual clicks on Textview link
+                    onLinkClicked?.invoke(link)
+                }
+            }
+        })
         .build()
 }
