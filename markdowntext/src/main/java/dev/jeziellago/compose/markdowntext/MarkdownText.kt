@@ -1,6 +1,7 @@
 package dev.jeziellago.compose.markdowntext
 
 import android.content.Context
+import android.graphics.Paint
 import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
@@ -18,6 +19,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.res.ResourcesCompat
@@ -112,6 +114,10 @@ private fun createTextView(
                 TextAlign.Center -> View.TEXT_ALIGNMENT_CENTER
                 else -> View.TEXT_ALIGNMENT_TEXT_START
             }
+        }
+
+        if (mergedStyle.textDecoration == TextDecoration.LineThrough) {
+            paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
         }
 
         fontResource?.let { font ->
