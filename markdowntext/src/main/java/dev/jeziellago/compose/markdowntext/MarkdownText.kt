@@ -48,7 +48,7 @@ fun MarkdownText(
     disableLinkMovementMethod: Boolean = false,
     imageLoader: ImageLoader? = null,
     onLinkClicked: ((String) -> Unit)? = null,
-    onTextLayout: ((numLines: Int) -> Unit)?
+    onTextLayout: ((numLines: Int) -> Unit)? = null
 ) {
     val defaultColor: Color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
     val context: Context = LocalContext.current
