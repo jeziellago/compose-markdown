@@ -47,7 +47,8 @@ fun MarkdownText(
     // it also enable the parent view to receive the click event
     disableLinkMovementMethod: Boolean = false,
     imageLoader: ImageLoader? = null,
-    onLinkClicked: ((String) -> Unit)? = null
+    onLinkClicked: ((String) -> Unit)? = null,
+    onTextLayout: ((numLines: Int) -> Unit)? = null
 ) {
     val defaultColor: Color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
     val context: Context = LocalContext.current
@@ -73,6 +74,12 @@ fun MarkdownText(
             if (disableLinkMovementMethod) {
                 textView.movementMethod = null
             }
+            if (onTextLayout != null) {
+                textView.post {
+                    onTextLayout(textView.lineCount)
+                }
+            }
+            textView.maxLines = maxLines
         }
     )
 }
