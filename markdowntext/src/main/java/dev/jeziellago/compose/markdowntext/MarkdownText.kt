@@ -32,6 +32,7 @@ import io.noties.markwon.ext.tables.TablePlugin
 import io.noties.markwon.html.HtmlPlugin
 import io.noties.markwon.image.coil.CoilImagesPlugin
 import io.noties.markwon.linkify.LinkifyPlugin
+import kotlinx.coroutines.FlowPreview
 
 @Composable
 fun MarkdownText(
@@ -40,6 +41,7 @@ fun MarkdownText(
     color: Color = Color.Unspecified,
     fontSize: TextUnit = TextUnit.Unspecified,
     textAlign: TextAlign? = null,
+    lineHeight: TextUnit = TextUnit.Unspecified,
     maxLines: Int = Int.MAX_VALUE,
     @FontRes fontResource: Int? = null,
     style: TextStyle = LocalTextStyle.current,
@@ -67,6 +69,7 @@ fun MarkdownText(
                 maxLines = maxLines,
                 style = style,
                 textAlign = textAlign,
+                lineHeight = lineHeight,
                 viewId = viewId,
                 onClick = onClick,
             )
@@ -92,6 +95,7 @@ private fun createTextView(
     defaultColor: Color,
     fontSize: TextUnit = TextUnit.Unspecified,
     textAlign: TextAlign? = null,
+    lineHeight: TextUnit,
     maxLines: Int = Int.MAX_VALUE,
     @FontRes fontResource: Int? = null,
     style: TextStyle,
@@ -105,6 +109,7 @@ private fun createTextView(
             color = textColor,
             fontSize = if (fontSize != TextUnit.Unspecified) fontSize else style.fontSize,
             textAlign = textAlign,
+            lineHeight = if (lineHeight != TextUnit.Unspecified) lineHeight else style.lineHeight,
         )
     )
     return TextView(context).apply {
@@ -121,6 +126,10 @@ private fun createTextView(
                 TextAlign.Center -> View.TEXT_ALIGNMENT_CENTER
                 else -> View.TEXT_ALIGNMENT_TEXT_START
             }
+        }
+
+        if (lineHeight != TextUnit.Unspecified) {
+            setLineSpacing(lineHeight.value, 1f)
         }
 
         if (mergedStyle.textDecoration == TextDecoration.LineThrough) {
