@@ -46,7 +46,7 @@ The font can be changed by passing a font xml resource as `fontResource` paramet
 
 ## How to use
 ```kotlin  
-val markdown = """  
+val markdownContent = """  
 	# Sample  
 	* Markdown  
 	* [Link](https://example.com)  
