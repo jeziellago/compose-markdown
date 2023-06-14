@@ -157,11 +157,16 @@ private fun createMarkdownRender(
         .usePlugin(StrikethroughPlugin.create())
         .usePlugin(TablePlugin.create(context))
         .usePlugin(LinkifyPlugin.create())
-        .usePlugin(object: AbstractMarkwonPlugin() {
+        .usePlugin(object : AbstractMarkwonPlugin() {
             override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {
-                builder.linkResolver { view, link ->
+                // Setting [MarkwonConfiguration.Builder.linkResolver] overrides
+                // Markwon's default behaviour - see Markwon's [LinkResolverDef]
+                // and how it's used in [MarkwonConfiguration.Builder].
+                // Only use it if the client explicitly wants to handle link clicks.
+                onLinkClicked ?: return
+                builder.linkResolver { _, link ->
                     // handle individual clicks on Textview link
-                    onLinkClicked?.invoke(link)
+                    onLinkClicked.invoke(link)
                 }
             }
         })
