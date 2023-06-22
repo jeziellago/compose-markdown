@@ -62,6 +62,6 @@ dependencies {
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
     implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
     implementation "androidx.compose.runtime:runtime-rxjava2:$compose_version"
-//    implementation project(':markdowntext')
-    implementation 'com.github.jeziellago:compose-markdown:4a84871586'
+    implementation project(':markdowntext')
+//    implementation 'com.github.jeziellago:compose-markdown:4a84871586'
 }

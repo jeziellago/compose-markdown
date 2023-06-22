@@ -2,6 +2,7 @@ package dev.jeziellago.compose.markdowntext
 
 import android.content.Context
 import android.graphics.Paint
+import android.text.util.Linkify
 import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
@@ -50,12 +51,13 @@ fun MarkdownText(
     // it also enable the parent view to receive the click event
     disableLinkMovementMethod: Boolean = false,
     imageLoader: ImageLoader? = null,
+    linkifyMask: Int = Linkify.EMAIL_ADDRESSES or Linkify.PHONE_NUMBERS or Linkify.WEB_URLS,
     onLinkClicked: ((String) -> Unit)? = null,
     onTextLayout: ((numLines: Int) -> Unit)? = null
 ) {
     val defaultColor: Color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
     val context: Context = LocalContext.current
-    val markdownRender: Markwon = remember { createMarkdownRender(context, imageLoader, onLinkClicked) }
+    val markdownRender: Markwon = remember { createMarkdownRender(context, imageLoader, linkifyMask, onLinkClicked) }
     AndroidView(
         modifier = modifier,
         factory = { ctx ->
@@ -144,6 +146,7 @@ private fun createTextView(
 private fun createMarkdownRender(
     context: Context,
     imageLoader: ImageLoader?,
+    linkifyMask: Int,
     onLinkClicked: ((String) -> Unit)? = null
 ): Markwon {
     val coilImageLoader = imageLoader ?: ImageLoader.Builder(context)
@@ -156,7 +159,7 @@ private fun createMarkdownRender(
         .usePlugin(CoilImagesPlugin.create(context, coilImageLoader))
         .usePlugin(StrikethroughPlugin.create())
         .usePlugin(TablePlugin.create(context))
-        .usePlugin(LinkifyPlugin.create())
+        .usePlugin(LinkifyPlugin.create(linkifyMask))
         .usePlugin(object : AbstractMarkwonPlugin() {
             override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {
                 // Setting [MarkwonConfiguration.Builder.linkResolver] overrides
