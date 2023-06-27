@@ -24,6 +24,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.widget.TextViewCompat
 import coil.ImageLoader
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
@@ -116,8 +117,19 @@ private fun createTextView(
     return TextView(context).apply {
         onClick?.let { setOnClickListener { onClick() } }
         setTextColor(textColor.toArgb())
+        when {
+            style.lineHeight.isSp ->
+                TextViewCompat.setLineHeight(
+                    this,
+                    TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_SP,
+                        style.lineHeight.value,
+                        context.resources.displayMetrics
+                    ).toInt()
+                )
+        }
         setMaxLines(maxLines)
-        setTextSize(TypedValue.COMPLEX_UNIT_DIP, mergedStyle.fontSize.value)
+        setTextSize(TypedValue.COMPLEX_UNIT_SP, mergedStyle.fontSize.value)
 
         viewId?.let { id = viewId }
         textAlign?.let { align ->
