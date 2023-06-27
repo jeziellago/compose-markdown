@@ -144,6 +144,10 @@ val demo = "---\n" +
         "\n" +
         "Autoconverted link https://github.com/nodeca/pica (enable linkify to see)\n" +
         "\n" +
+        "tel: (800) 555-1212\n" +
+        "\n" +
+        "e-mail: compose@markdwon.com\n" +
+        "\n" +
         "\n" +
         "## Images\n" +
         "\n" +
