@@ -48,8 +48,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
-    implementation("io.coil-kt:coil:2.2.2")
-
     // Jetpack Compose
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1"
     implementation "androidx.activity:activity-compose:1.4.0"
@@ -63,5 +61,4 @@ dependencies {
     implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
     implementation "androidx.compose.runtime:runtime-rxjava2:$compose_version"
     implementation project(':markdowntext')
-//    implementation 'com.github.jeziellago:compose-markdown:4a84871586'
 }
