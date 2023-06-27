@@ -2,6 +2,7 @@ package dev.jeziellago.compose.markdowntext
 
 import android.content.Context
 import android.graphics.Paint
+import android.os.Build
 import android.text.util.Linkify
 import android.util.TypedValue
 import android.view.View
@@ -35,6 +36,16 @@ import io.noties.markwon.html.HtmlPlugin
 import io.noties.markwon.image.coil.CoilImagesPlugin
 import io.noties.markwon.linkify.LinkifyPlugin
 
+/**
+ * Requires API Level 26 to apply auto size
+ * */
+data class AutoSizeConfig(
+    val autoSizeMinTextSize: Int,
+    val autoSizeMaxTextSize: Int,
+    val autoSizeStepGranularity: Int,
+    val unit: Int = TypedValue.COMPLEX_UNIT_SP,
+)
+
 @Composable
 fun MarkdownText(
     markdown: String,
@@ -44,6 +55,7 @@ fun MarkdownText(
     textAlign: TextAlign? = null,
     lineHeight: TextUnit = TextUnit.Unspecified,
     maxLines: Int = Int.MAX_VALUE,
+    autoSizeConfig: AutoSizeConfig? = null,
     @FontRes fontResource: Int? = null,
     style: TextStyle = LocalTextStyle.current,
     @IdRes viewId: Int? = null,
@@ -58,7 +70,8 @@ fun MarkdownText(
 ) {
     val defaultColor: Color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
     val context: Context = LocalContext.current
-    val markdownRender: Markwon = remember { createMarkdownRender(context, imageLoader, linkifyMask, onLinkClicked) }
+    val markdownRender: Markwon =
+        remember { createMarkdownRender(context, imageLoader, linkifyMask, onLinkClicked) }
     AndroidView(
         modifier = modifier,
         factory = { ctx ->
@@ -69,6 +82,7 @@ fun MarkdownText(
                 fontSize = fontSize,
                 fontResource = fontResource,
                 maxLines = maxLines,
+                autoSizeConfig = autoSizeConfig,
                 style = style,
                 textAlign = textAlign,
                 lineHeight = lineHeight,
@@ -99,6 +113,7 @@ private fun createTextView(
     textAlign: TextAlign? = null,
     lineHeight: TextUnit,
     maxLines: Int = Int.MAX_VALUE,
+    autoSizeConfig: AutoSizeConfig? = null,
     @FontRes fontResource: Int? = null,
     style: TextStyle,
     @IdRes viewId: Int? = null,
@@ -151,6 +166,17 @@ private fun createTextView(
 
         fontResource?.let { font ->
             typeface = ResourcesCompat.getFont(context, font)
+        }
+
+        autoSizeConfig?.let { config ->
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                setAutoSizeTextTypeUniformWithConfiguration(
+                    config.autoSizeMinTextSize,
+                    config.autoSizeMaxTextSize,
+                    config.autoSizeStepGranularity,
+                    config.unit
+                )
+            }
         }
     }
 }

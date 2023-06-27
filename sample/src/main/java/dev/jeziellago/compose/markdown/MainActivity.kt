@@ -15,8 +15,13 @@ import androidx.compose.ui.unit.dp
 import dev.jeziellago.compose.markdowntext.MarkdownText
 
 class MainActivity : AppCompatActivity() {
+
+    private var rawMarkdown = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        rawMarkdown = String(resources.openRawResource(R.raw.markdown).readBytes()) +
+        "\n# HTML SECTION ${String(resources.openRawResource(R.raw.html).readBytes())}"
         setContent {
             SampleMarkdown()
         }
@@ -39,7 +44,7 @@ class MainActivity : AppCompatActivity() {
             ) {
                 item {
                     MarkdownText(
-                        markdown = demo,
+                        markdown = rawMarkdown,
                         viewId =
                         R.id.markdownTextId,
                         disableLinkMovementMethod = false
