@@ -28,7 +28,7 @@ dependencyResolutionManagement {
 3. Add `compose-markdown` dependency
 ```groovy
 dependencies {
-        implementation 'com.github.jeziellago:compose-markdown:0.3.3'
+        implementation 'com.github.jeziellago:compose-markdown:{LAST-RELEASE}'
 }
 ```
 
@@ -76,6 +76,16 @@ fun ComplexExampleContent() {
      )  
 }  
 ```  
+
+### Contributors
+
+Thank you all for your work! ❤️
+
+<a href="https://github.com/jeziellago/compose-markdown/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=jeziellago/compose-markdown" />
+</a>
+
+
 
 # License
 ```  
