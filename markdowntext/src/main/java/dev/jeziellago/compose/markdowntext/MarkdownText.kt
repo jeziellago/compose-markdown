@@ -55,6 +55,7 @@ fun MarkdownText(
     textAlign: TextAlign? = null,
     lineHeight: TextUnit = TextUnit.Unspecified,
     maxLines: Int = Int.MAX_VALUE,
+    isTextSelectable: Boolean = false,
     autoSizeConfig: AutoSizeConfig? = null,
     @FontRes fontResource: Int? = null,
     style: TextStyle = LocalTextStyle.current,
@@ -82,6 +83,7 @@ fun MarkdownText(
                 fontSize = fontSize,
                 fontResource = fontResource,
                 maxLines = maxLines,
+                isTextSelectable = isTextSelectable,
                 autoSizeConfig = autoSizeConfig,
                 style = style,
                 textAlign = textAlign,
@@ -113,6 +115,7 @@ private fun createTextView(
     textAlign: TextAlign? = null,
     lineHeight: TextUnit,
     maxLines: Int = Int.MAX_VALUE,
+    isTextSelectable: Boolean = false,
     autoSizeConfig: AutoSizeConfig? = null,
     @FontRes fontResource: Int? = null,
     style: TextStyle,
@@ -145,6 +148,8 @@ private fun createTextView(
         }
         setMaxLines(maxLines)
         setTextSize(TypedValue.COMPLEX_UNIT_SP, mergedStyle.fontSize.value)
+
+        setTextIsSelectable(isTextSelectable)
 
         viewId?.let { id = viewId }
         textAlign?.let { align ->
