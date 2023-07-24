@@ -3,6 +3,7 @@ package dev.jeziellago.compose.markdowntext
 import android.content.Context
 import android.graphics.Paint
 import android.os.Build
+import android.text.method.LinkMovementMethod
 import android.text.util.Linkify
 import android.util.TypedValue
 import android.view.View
@@ -150,6 +151,7 @@ private fun createTextView(
         setTextSize(TypedValue.COMPLEX_UNIT_SP, mergedStyle.fontSize.value)
 
         setTextIsSelectable(isTextSelectable)
+        movementMethod = LinkMovementMethod.getInstance()
 
         viewId?.let { id = viewId }
         textAlign?.let { align ->
