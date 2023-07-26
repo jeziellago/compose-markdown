@@ -52,6 +52,7 @@ fun MarkdownText(
     markdown: String,
     modifier: Modifier = Modifier,
     color: Color = Color.Unspecified,
+    linkColor: Color = Color.Unspecified,
     fontSize: TextUnit = TextUnit.Unspecified,
     textAlign: TextAlign? = null,
     lineHeight: TextUnit = TextUnit.Unspecified,
@@ -80,6 +81,7 @@ fun MarkdownText(
             createTextView(
                 context = ctx,
                 color = color,
+                linkColor = linkColor,
                 defaultColor = defaultColor,
                 fontSize = fontSize,
                 fontResource = fontResource,
@@ -111,6 +113,7 @@ fun MarkdownText(
 private fun createTextView(
     context: Context,
     color: Color = Color.Unspecified,
+    linkColor: Color = Color.Unspecified,
     defaultColor: Color,
     fontSize: TextUnit = TextUnit.Unspecified,
     textAlign: TextAlign? = null,
@@ -125,6 +128,7 @@ private fun createTextView(
 ): TextView {
 
     val textColor = color.takeOrElse { style.color.takeOrElse { defaultColor } }
+    val linkTextColor = linkColor.takeOrElse { style.color.takeOrElse { defaultColor } }
     val mergedStyle = style.merge(
         TextStyle(
             color = textColor,
@@ -136,6 +140,7 @@ private fun createTextView(
     return TextView(context).apply {
         onClick?.let { setOnClickListener { onClick() } }
         setTextColor(textColor.toArgb())
+        setLinkTextColor(linkTextColor.toArgb())
         when {
             style.lineHeight.isSp ->
                 TextViewCompat.setLineHeight(
