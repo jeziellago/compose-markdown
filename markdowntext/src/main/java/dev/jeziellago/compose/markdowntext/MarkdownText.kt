@@ -3,6 +3,7 @@ package dev.jeziellago.compose.markdowntext
 import android.content.Context
 import android.graphics.Paint
 import android.os.Build
+import android.text.method.LinkMovementMethod
 import android.text.util.Linkify
 import android.util.TypedValue
 import android.view.View
@@ -56,6 +57,7 @@ fun MarkdownText(
     textAlign: TextAlign? = null,
     lineHeight: TextUnit = TextUnit.Unspecified,
     maxLines: Int = Int.MAX_VALUE,
+    isTextSelectable: Boolean = false,
     autoSizeConfig: AutoSizeConfig? = null,
     @FontRes fontResource: Int? = null,
     style: TextStyle = LocalTextStyle.current,
@@ -84,6 +86,7 @@ fun MarkdownText(
                 fontSize = fontSize,
                 fontResource = fontResource,
                 maxLines = maxLines,
+                isTextSelectable = isTextSelectable,
                 autoSizeConfig = autoSizeConfig,
                 style = style,
                 textAlign = textAlign,
@@ -116,6 +119,7 @@ private fun createTextView(
     textAlign: TextAlign? = null,
     lineHeight: TextUnit,
     maxLines: Int = Int.MAX_VALUE,
+    isTextSelectable: Boolean = false,
     autoSizeConfig: AutoSizeConfig? = null,
     @FontRes fontResource: Int? = null,
     style: TextStyle,
@@ -150,6 +154,9 @@ private fun createTextView(
         }
         setMaxLines(maxLines)
         setTextSize(TypedValue.COMPLEX_UNIT_SP, mergedStyle.fontSize.value)
+
+        setTextIsSelectable(isTextSelectable)
+        movementMethod = LinkMovementMethod.getInstance()
 
         viewId?.let { id = viewId }
         textAlign?.let { align ->
