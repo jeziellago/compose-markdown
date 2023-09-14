@@ -13,9 +13,8 @@ import android.view.View
 import android.widget.TextView
 import androidx.annotation.FontRes
 import androidx.annotation.IdRes
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.LocalTextStyle
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -77,7 +76,7 @@ fun MarkdownText(
     onLinkClicked: ((String) -> Unit)? = null,
     onTextLayout: ((numLines: Int) -> Unit)? = null
 ) {
-    val defaultColor: Color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
+    val defaultColor: Color = LocalContentColor.current
     val context: Context = LocalContext.current
     val markdownRender: Markwon =
         remember { createMarkdownRender(context, imageLoader, linkifyMask, onLinkClicked) }
