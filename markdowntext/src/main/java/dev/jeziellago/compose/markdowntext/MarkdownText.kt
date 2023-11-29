@@ -3,6 +3,8 @@ package dev.jeziellago.compose.markdowntext
 import android.content.Context
 import android.graphics.Paint
 import android.os.Build
+import android.text.SpannableStringBuilder
+import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.util.Linkify
 import android.util.TypedValue
@@ -26,6 +28,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.doOnNextLayout
 import androidx.core.widget.TextViewCompat
 import coil.ImageLoader
 import io.noties.markwon.AbstractMarkwonPlugin
@@ -56,6 +59,7 @@ fun MarkdownText(
     linkColor: Color = Color.Unspecified,
     fontSize: TextUnit = TextUnit.Unspecified,
     textAlign: TextAlign? = null,
+    truncateOnTextOverflow: Boolean = false,
     lineHeight: TextUnit = TextUnit.Unspecified,
     maxLines: Int = Int.MAX_VALUE,
     isTextSelectable: Boolean = false,
@@ -91,6 +95,7 @@ fun MarkdownText(
                 autoSizeConfig = autoSizeConfig,
                 style = style,
                 textAlign = textAlign,
+                truncateOnTextOverflow = truncateOnTextOverflow,
                 lineHeight = lineHeight,
                 viewId = viewId,
                 onClick = onClick,
@@ -118,6 +123,7 @@ private fun createTextView(
     defaultColor: Color,
     fontSize: TextUnit = TextUnit.Unspecified,
     textAlign: TextAlign? = null,
+    truncateOnTextOverflow: Boolean = false,
     lineHeight: TextUnit,
     maxLines: Int = Int.MAX_VALUE,
     isTextSelectable: Boolean = false,
@@ -179,6 +185,22 @@ private fun createTextView(
 
         fontResource?.let { font ->
             typeface = ResourcesCompat.getFont(context, font)
+        }
+
+        if (truncateOnTextOverflow) {
+            doOnNextLayout {
+                if (maxLines != -1 && lineCount > maxLines) {
+                    val endOfLastLine = layout.getLineEnd(maxLines - 1)
+                    val spannedDropLast3Chars = text.subSequence(0, endOfLastLine - 3) as? Spanned
+                    if (spannedDropLast3Chars != null) {
+                        val spannableBuilder = SpannableStringBuilder()
+                            .append(spannedDropLast3Chars)
+                            .append("…")
+
+                        text = spannableBuilder
+                    }
+                }
+            }
         }
 
         autoSizeConfig?.let { config ->

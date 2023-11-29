@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.jeziellago.compose.markdowntext.MarkdownText
 
@@ -47,6 +48,7 @@ class MainActivity : AppCompatActivity() {
                         markdown = rawMarkdown,
                         viewId =
                         R.id.markdownTextId,
+                        textAlign = TextAlign.Justify,
                         disableLinkMovementMethod = false
                     )
                 }
