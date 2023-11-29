@@ -2,6 +2,7 @@ package dev.jeziellago.compose.markdowntext
 
 import android.content.Context
 import android.graphics.Paint
+import android.graphics.text.LineBreaker
 import android.os.Build
 import android.text.SpannableStringBuilder
 import android.text.Spanned
@@ -185,6 +186,10 @@ private fun createTextView(
 
         fontResource?.let { font ->
             typeface = ResourcesCompat.getFont(context, font)
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && textAlign == TextAlign.Justify) {
+            justificationMode = LineBreaker.JUSTIFICATION_MODE_INTER_WORD
         }
 
         if (truncateOnTextOverflow) {
