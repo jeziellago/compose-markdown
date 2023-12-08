@@ -4,12 +4,9 @@ import android.content.Context
 import android.graphics.Paint
 import android.graphics.text.LineBreaker
 import android.os.Build
-import android.text.SpannableStringBuilder
-import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.util.Linkify
 import android.util.TypedValue
-import android.view.View
 import android.widget.TextView
 import androidx.annotation.FontRes
 import androidx.annotation.IdRes
@@ -29,7 +26,6 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.doOnNextLayout
 import androidx.core.widget.TextViewCompat
 import coil.ImageLoader
 import io.noties.markwon.AbstractMarkwonPlugin
@@ -167,14 +163,9 @@ private fun createTextView(
         movementMethod = LinkMovementMethod.getInstance()
 
         viewId?.let { id = viewId }
-        textAlign?.let { align ->
-            textAlignment = when (align) {
-                TextAlign.Left, TextAlign.Start -> View.TEXT_ALIGNMENT_TEXT_START
-                TextAlign.Right, TextAlign.End -> View.TEXT_ALIGNMENT_TEXT_END
-                TextAlign.Center -> View.TEXT_ALIGNMENT_CENTER
-                else -> View.TEXT_ALIGNMENT_TEXT_START
-            }
-        }
+        textAlign?.let { applyTextAlign(it) }
+        mergedStyle.fontStyle?.let { applyFontStyle(it) }
+        mergedStyle.fontWeight?.let { applyFontWeight(it) }
 
         if (lineHeight != TextUnit.Unspecified) {
             setLineSpacing(lineHeight.value, 1f)
@@ -188,25 +179,7 @@ private fun createTextView(
             typeface = ResourcesCompat.getFont(context, font)
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && textAlign == TextAlign.Justify) {
-            justificationMode = LineBreaker.JUSTIFICATION_MODE_INTER_WORD
-        }
-
-        if (truncateOnTextOverflow) {
-            doOnNextLayout {
-                if (maxLines != -1 && lineCount > maxLines) {
-                    val endOfLastLine = layout.getLineEnd(maxLines - 1)
-                    val spannedDropLast3Chars = text.subSequence(0, endOfLastLine - 3) as? Spanned
-                    if (spannedDropLast3Chars != null) {
-                        val spannableBuilder = SpannableStringBuilder()
-                            .append(spannedDropLast3Chars)
-                            .append("…")
-
-                        text = spannableBuilder
-                    }
-                }
-            }
-        }
+        if (truncateOnTextOverflow) enableTextOverflow()
 
         autoSizeConfig?.let { config ->
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
