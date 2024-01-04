@@ -143,6 +143,7 @@ private fun createTextView(
             fontSize = if (fontSize != TextUnit.Unspecified) fontSize else style.fontSize,
             textAlign = textAlign,
             lineHeight = if (lineHeight != TextUnit.Unspecified) lineHeight else style.lineHeight,
+            fontFamily = if (fontResource == null) style.fontFamily else null
         )
     )
     return TextView(context).apply {
