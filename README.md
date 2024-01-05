@@ -34,13 +34,7 @@ dependencies {
 
 # Supported attributes
 
-Most of the attributes of that a default `Text` composable has are also supported by `MarkdownText`. 
-
-- color 
-- fontSize
-- textAlign
-- maxLines
-- style (only styling for supported attributes is applied)
+Most of the attributes of that a default `Text` composable has are also supported by `MarkdownText`.
 
 The font can be changed by passing a font xml resource as `fontResource` parameter. 
 
@@ -66,12 +60,14 @@ fun ComplexExampleContent() {
      MarkdownText(
                 modifier = Modifier.padding(8.dp),
                 markdown = markdown,
-                textAlign = TextAlign.Center,
-                fontSize = 12.sp,
-                color = LocalContentColor.current,
                 maxLines = 3,
                 fontResource = R.font.montserrat_medium,
-                style = MaterialTheme.typography.overline,
+                style = TextStyle(
+                        color = Color.Blue,
+                        fontSize = 12.sp,
+                        lineHeight = 10.sp,
+                        textAlign = TextAlign.Justify,
+                 ),
               
      )  
 }  
@@ -79,7 +75,7 @@ fun ComplexExampleContent() {
 
 ### Contributors
 
-Thank you all for your work! ❤️
+Thank you all for your contribution! ❤️
 
 <a href="https://github.com/jeziellago/compose-markdown/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=jeziellago/compose-markdown" />
