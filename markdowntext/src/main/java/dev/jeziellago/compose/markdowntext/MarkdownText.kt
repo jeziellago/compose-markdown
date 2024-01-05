@@ -118,16 +118,6 @@ fun MarkdownText(
                 setMaxLines(maxLines)
                 setLinkTextColor(linkTextColor.toArgb())
 
-                applyTextColor(style.color.takeOrElse { defaultColor }.toArgb())
-                applyLineHeight(style)
-                applyFontSize(style)
-                applyLineSpacing(style)
-                applyTextDecoration(style)
-
-                style.textAlign?.let { applyTextAlign(it) }
-                style.fontStyle?.let { applyFontStyle(it) }
-                style.fontWeight?.let { applyFontWeight(it) }
-
                 setTextIsSelectable(isTextSelectable)
 
                 movementMethod = LinkMovementMethod.getInstance()
@@ -147,6 +137,19 @@ fun MarkdownText(
             }
         },
         update = { textView ->
+            with(textView) {
+                applyTextColor(style.color.takeOrElse { defaultColor }.toArgb())
+                applyFontSize(style)
+                applyLineHeight(style)
+                applyLineSpacing(style)
+                applyTextDecoration(style)
+
+                with(style) {
+                    textAlign?.let { applyTextAlign(it) }
+                    fontStyle?.let { applyFontStyle(it) }
+                    fontWeight?.let { applyFontWeight(it) }
+                }
+            }
             markdownRender.setMarkdown(textView, markdown)
             if (disableLinkMovementMethod) {
                 textView.movementMethod = null

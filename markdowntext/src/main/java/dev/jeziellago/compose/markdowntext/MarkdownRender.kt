@@ -20,7 +20,7 @@ internal object MarkdownRender {
         linkifyMask: Int,
         onLinkClicked: ((String) -> Unit)? = null
     ): Markwon {
-        val coilImageLoader = imageLoader ?:createCoilImageLoader(context)
+        val coilImageLoader = imageLoader ?: createCoilImageLoader(context)
         return Markwon.builder(context)
             .usePlugin(HtmlPlugin.create())
             .usePlugin(CoilImagesPlugin.create(context, coilImageLoader))
