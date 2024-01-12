@@ -2,6 +2,7 @@ package dev.jeziellago.compose.markdowntext
 
 import android.content.Context
 import coil.ImageLoader
+import coil.imageLoader
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonConfiguration
@@ -20,7 +21,7 @@ internal object MarkdownRender {
         linkifyMask: Int,
         onLinkClicked: ((String) -> Unit)? = null
     ): Markwon {
-        val coilImageLoader = imageLoader ?: createCoilImageLoader(context)
+        val coilImageLoader = imageLoader ?: context.imageLoader
         return Markwon.builder(context)
             .usePlugin(HtmlPlugin.create())
             .usePlugin(CoilImagesPlugin.create(context, coilImageLoader))
@@ -43,9 +44,4 @@ internal object MarkdownRender {
             })
             .build()
     }
-
-    private fun createCoilImageLoader(context: Context) =
-        ImageLoader.Builder(context)
-            .crossfade(true)
-            .build()
 }
