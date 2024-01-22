@@ -36,6 +36,7 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion '1.2.0'
     }
+    namespace 'dev.jeziellago.compose.markdown'
 }
 
 dependencies {
