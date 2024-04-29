@@ -45,6 +45,7 @@ fun MarkdownText(
     disableLinkMovementMethod: Boolean = false,
     imageLoader: ImageLoader? = null,
     linkifyMask: Int = Linkify.EMAIL_ADDRESSES or Linkify.PHONE_NUMBERS or Linkify.WEB_URLS,
+    enableSoftBreakAddsNewLine: Boolean = true,
     onLinkClicked: ((String) -> Unit)? = null,
     onTextLayout: ((numLines: Int) -> Unit)? = null
 ) {
@@ -73,6 +74,7 @@ fun MarkdownText(
         disableLinkMovementMethod = disableLinkMovementMethod,
         imageLoader = imageLoader,
         linkifyMask = linkifyMask,
+        enableSoftBreakAddsNewLine = enableSoftBreakAddsNewLine,
         onLinkClicked = onLinkClicked,
         onTextLayout = onTextLayout,
     )
@@ -96,13 +98,22 @@ fun MarkdownText(
     disableLinkMovementMethod: Boolean = false,
     imageLoader: ImageLoader? = null,
     linkifyMask: Int = Linkify.EMAIL_ADDRESSES or Linkify.PHONE_NUMBERS or Linkify.WEB_URLS,
+    enableSoftBreakAddsNewLine: Boolean = true,
     onLinkClicked: ((String) -> Unit)? = null,
     onTextLayout: ((numLines: Int) -> Unit)? = null
 ) {
     val defaultColor: Color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
     val context: Context = LocalContext.current
     val markdownRender: Markwon =
-        remember { MarkdownRender.create(context, imageLoader, linkifyMask, onLinkClicked) }
+        remember {
+            MarkdownRender.create(
+                context,
+                imageLoader,
+                linkifyMask,
+                enableSoftBreakAddsNewLine,
+                onLinkClicked
+            )
+        }
 
     AndroidView(
         modifier = modifier,

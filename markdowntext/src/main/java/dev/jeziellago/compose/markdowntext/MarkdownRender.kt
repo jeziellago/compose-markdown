@@ -19,7 +19,8 @@ internal object MarkdownRender {
         context: Context,
         imageLoader: ImageLoader?,
         linkifyMask: Int,
-        onLinkClicked: ((String) -> Unit)? = null
+        enableSoftBreakAddsNewLine: Boolean,
+        onLinkClicked: ((String) -> Unit)? = null,
     ): Markwon {
         val coilImageLoader = imageLoader ?: context.imageLoader
         return Markwon.builder(context)
@@ -28,7 +29,11 @@ internal object MarkdownRender {
             .usePlugin(StrikethroughPlugin.create())
             .usePlugin(TablePlugin.create(context))
             .usePlugin(LinkifyPlugin.create(linkifyMask))
-            .usePlugin(SoftBreakAddsNewLinePlugin.create())
+            .apply {
+                if (enableSoftBreakAddsNewLine) {
+                    usePlugin(SoftBreakAddsNewLinePlugin.create())
+                }
+            }
             .usePlugin(object : AbstractMarkwonPlugin() {
                 override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {
                     // Setting [MarkwonConfiguration.Builder.linkResolver] overrides
