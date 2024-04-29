@@ -32,7 +32,7 @@ fun MarkdownText(
     color: Color = Color.Unspecified,
     linkColor: Color = Color.Unspecified,
     fontSize: TextUnit = TextUnit.Unspecified,
-    textAlign: TextAlign? = null,
+    textAlign: TextAlign = TextAlign.Unspecified,
     truncateOnTextOverflow: Boolean = false,
     lineHeight: TextUnit = TextUnit.Unspecified,
     maxLines: Int = Int.MAX_VALUE,
@@ -156,7 +156,7 @@ fun MarkdownText(
                 applyTextDecoration(style)
 
                 with(style) {
-                    textAlign?.let { applyTextAlign(it) }
+                    applyTextAlign(textAlign)
                     fontStyle?.let { applyFontStyle(it) }
                     fontWeight?.let { applyFontWeight(it) }
                 }
