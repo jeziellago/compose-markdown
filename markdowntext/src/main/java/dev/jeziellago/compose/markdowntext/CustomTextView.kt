@@ -12,7 +12,7 @@ class CustomTextView(context: Context?) : AppCompatTextView(context!!) {
         if (event.action == MotionEvent.ACTION_UP || event.action == MotionEvent.ACTION_DOWN) {
             val link = getClickableSpans(event)
 
-            if (link.size != 0) {
+            if (link.isNotEmpty()) {
                 if (event.action == MotionEvent.ACTION_UP) {
                     link[0].onClick(this)
                 }

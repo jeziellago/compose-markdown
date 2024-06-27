@@ -118,7 +118,7 @@ fun MarkdownText(
         }
 
     AndroidView(
-        modifier = modifier.clickable { onClick?.let { it() } },
+        modifier = Modifier.clickable { onClick?.let { it() } }.then(modifier),
         factory = { factoryContext ->
 
             val linkTextColor = linkColor.takeOrElse { style.color.takeOrElse { defaultColor } }
