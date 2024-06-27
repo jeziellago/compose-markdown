@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.annotation.FontRes
 import androidx.annotation.IdRes
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.compose.foundation.clickable
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
@@ -42,6 +43,7 @@ fun MarkdownText(
     @FontRes fontResource: Int? = null,
     style: TextStyle = LocalTextStyle.current,
     @IdRes viewId: Int? = null,
+    onClick: (() -> Unit)? = null,
     disableLinkMovementMethod: Boolean = false,
     imageLoader: ImageLoader? = null,
     linkifyMask: Int = Linkify.EMAIL_ADDRESSES or Linkify.PHONE_NUMBERS or Linkify.WEB_URLS,
@@ -70,6 +72,7 @@ fun MarkdownText(
         fontResource = fontResource,
         style = mergedStyle,
         viewId = viewId,
+        onClick = onClick,
         disableLinkMovementMethod = disableLinkMovementMethod,
         imageLoader = imageLoader,
         linkifyMask = linkifyMask,
@@ -91,6 +94,7 @@ fun MarkdownText(
     @FontRes fontResource: Int? = null,
     style: TextStyle = LocalTextStyle.current,
     @IdRes viewId: Int? = null,
+    onClick: (() -> Unit)? = null,
     // this option will disable all clicks on links, inside the markdown text
     // it also enable the parent view to receive the click event
     disableLinkMovementMethod: Boolean = false,
@@ -114,7 +118,7 @@ fun MarkdownText(
         }
 
     AndroidView(
-        modifier = modifier,
+        modifier = modifier.clickable { onClick?.let { it() } },
         factory = { factoryContext ->
 
             val linkTextColor = linkColor.takeOrElse { style.color.takeOrElse { defaultColor } }
