@@ -10,18 +10,20 @@ import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
 import androidx.annotation.FontRes
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalFontFamilyResolver
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontListFontFamily
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontSynthesis
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.font.FontWeight.Companion.ExtraBold
 import androidx.compose.ui.text.font.FontWeight.Companion.SemiBold
-import androidx.compose.ui.text.font.LoadedFontFamily
-import androidx.compose.ui.text.font.SystemFontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.TextUnit
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.doOnNextLayout
 import androidx.core.widget.TextViewCompat
@@ -45,15 +47,6 @@ fun TextView.applyFontStyle(fontStyle: FontStyle) {
         else -> Typeface.NORMAL
     }
     setTypeface(typeface, type)
-}
-
-//TODO: should implement the font loading by setting up the typeface on native TextView
-fun TextView.applyFontFamily(fontFamily: FontFamily) {
-    when(fontFamily) {
-        is SystemFontFamily -> {}
-        is FontListFontFamily -> {}
-        is LoadedFontFamily -> {}
-    }
 }
 
 fun TextView.applyFontResource(@FontRes font: Int) {
@@ -118,4 +111,33 @@ fun TextView.enableTextOverflow() {
             }
         }
     }
+}
+
+fun TextView.applyFontFamily(typeface: Typeface) {
+    setTypeface(typeface)
+}
+
+fun TextView.applyLetterSpacing(letterSpacing: TextUnit) {
+    if (letterSpacing != TextUnit.Unspecified) {
+        setLetterSpacing(letterSpacing.value)
+    }
+}
+
+/**
+ * https://stackoverflow.com/questions/70800896/how-to-convert-textstyle-from-jetpack-compose-to-android-graphics-typeface
+ */
+@Composable
+fun TextStyle.getFontFamilyAsTypeFace(): Typeface {
+    val resolver: FontFamily.Resolver = LocalFontFamilyResolver.current
+
+    val typeface: Typeface = remember(resolver, this) {
+        resolver.resolve(
+            fontFamily = fontFamily,
+            fontWeight = fontWeight ?: FontWeight.Normal,
+            fontStyle = fontStyle ?: FontStyle.Normal,
+            fontSynthesis = fontSynthesis ?: FontSynthesis.All,
+        )
+    }.value as Typeface
+
+    return typeface
 }
