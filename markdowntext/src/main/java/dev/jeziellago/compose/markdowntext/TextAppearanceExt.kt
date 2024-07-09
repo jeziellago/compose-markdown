@@ -85,8 +85,9 @@ fun TextView.applyTextDecoration(textStyle: TextStyle) {
 
 fun TextView.applyRemoveUrlUnderlines() {
     val noUnderlineSpan = object : UnderlineSpan() {
-        override fun updateDrawState(tp: TextPaint) {
-            tp.isUnderlineText = false
+        override fun updateDrawState(textPaint: TextPaint) {
+            textPaint.isUnderlineText = false
+            super.updateDrawState(textPaint)
         }
     }
     when (val text = this.text) {
