@@ -53,8 +53,10 @@ fun MarkdownText(
         TextStyle(
             color = color,
             fontSize = if (fontSize != TextUnit.Unspecified) fontSize else style.fontSize,
+            fontFamily = style.fontFamily,
             textAlign = textAlign,
             lineHeight = if (lineHeight != TextUnit.Unspecified) lineHeight else style.lineHeight,
+            letterSpacing = style.letterSpacing
         )
     )
 
@@ -114,6 +116,8 @@ fun MarkdownText(
             )
         }
 
+    val fontTypeFace = style.getFontFamilyAsTypeFace()
+
     AndroidView(
         modifier = modifier,
         factory = { factoryContext ->
@@ -157,6 +161,8 @@ fun MarkdownText(
                     applyTextAlign(textAlign)
                     fontStyle?.let { applyFontStyle(it) }
                     fontWeight?.let { applyFontWeight(it) }
+                    fontFamily?.let { applyFontFamily(fontTypeFace) }
+                    applyLetterSpacing(letterSpacing)
                 }
             }
             markdownRender.setMarkdown(textView, markdown)
