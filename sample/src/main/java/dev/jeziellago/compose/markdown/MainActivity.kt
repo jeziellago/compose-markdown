@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import dev.jeziellago.compose.markdowntext.MarkdownText
 import dev.jeziellago.compose.markdown.sample.R
 
@@ -36,12 +37,17 @@ class MainActivity : AppCompatActivity() {
                     markdown = """
                             ## Custom font
 
-                            This text is using OpenSans Regular.
+                            This text is using OpenSans Regular. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                             
                             ---
                         
                         """.trimIndent(),
                     fontResource = R.font.opensans_regular,
+                    style = TextStyle(
+                        textAlign = TextAlign.Justify,
+                        lineHeight = 24.sp,
+                        fontSize = 18.sp
+                    )
                 )
             }
             item {

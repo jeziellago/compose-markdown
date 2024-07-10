@@ -68,10 +68,6 @@ fun TextView.applyFontSize(textStyle: TextStyle) {
     setTextSize(TypedValue.COMPLEX_UNIT_SP, textStyle.fontSize.value)
 }
 
-fun TextView.applyLineSpacing(textStyle: TextStyle) {
-    setLineSpacing(textStyle.lineHeight.value, 1f)
-}
-
 fun TextView.applyTextDecoration(textStyle: TextStyle) {
     if (textStyle.textDecoration == TextDecoration.LineThrough) {
         paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
