@@ -7,7 +7,7 @@ import android.os.Build
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.util.TypedValue
-import android.view.View
+import android.view.Gravity
 import android.widget.TextView
 import androidx.annotation.FontRes
 import androidx.compose.ui.text.TextStyle
@@ -88,11 +88,11 @@ fun TextView.applyLineHeight(textStyle: TextStyle) {
 }
 
 fun TextView.applyTextAlign(align: TextAlign) {
-    textAlignment = when (align) {
-        TextAlign.Left, TextAlign.Start -> View.TEXT_ALIGNMENT_TEXT_START
-        TextAlign.Right, TextAlign.End -> View.TEXT_ALIGNMENT_TEXT_END
-        TextAlign.Center -> View.TEXT_ALIGNMENT_CENTER
-        else -> View.TEXT_ALIGNMENT_TEXT_START
+    gravity = when (align) {
+        TextAlign.Left, TextAlign.Start -> Gravity.START
+        TextAlign.Right, TextAlign.End -> Gravity.END
+        TextAlign.Center -> Gravity.CENTER_HORIZONTAL
+        else -> Gravity.START
     }
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && align == TextAlign.Justify) {
