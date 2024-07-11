@@ -11,7 +11,7 @@ import android.text.TextPaint
 import android.text.style.URLSpan
 import android.text.style.UnderlineSpan
 import android.util.TypedValue
-import android.view.View
+import android.view.Gravity
 import android.widget.TextView
 import androidx.annotation.FontRes
 import androidx.compose.ui.text.TextStyle
@@ -73,10 +73,6 @@ fun TextView.applyFontSize(textStyle: TextStyle) {
     setTextSize(TypedValue.COMPLEX_UNIT_SP, textStyle.fontSize.value)
 }
 
-fun TextView.applyLineSpacing(textStyle: TextStyle) {
-    setLineSpacing(textStyle.lineHeight.value, 1f)
-}
-
 fun TextView.applyTextDecoration(textStyle: TextStyle) {
     if (textStyle.textDecoration == TextDecoration.LineThrough) {
         paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
@@ -113,11 +109,11 @@ fun TextView.applyLineHeight(textStyle: TextStyle) {
 }
 
 fun TextView.applyTextAlign(align: TextAlign) {
-    textAlignment = when (align) {
-        TextAlign.Left, TextAlign.Start -> View.TEXT_ALIGNMENT_TEXT_START
-        TextAlign.Right, TextAlign.End -> View.TEXT_ALIGNMENT_TEXT_END
-        TextAlign.Center -> View.TEXT_ALIGNMENT_CENTER
-        else -> View.TEXT_ALIGNMENT_TEXT_START
+    gravity = when (align) {
+        TextAlign.Left, TextAlign.Start -> Gravity.START
+        TextAlign.Right, TextAlign.End -> Gravity.END
+        TextAlign.Center -> Gravity.CENTER_HORIZONTAL
+        else -> Gravity.START
     }
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && align == TextAlign.Justify) {

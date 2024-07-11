@@ -152,7 +152,6 @@ fun MarkdownText(
                 applyTextColor(style.color.takeOrElse { defaultColor }.toArgb())
                 applyFontSize(style)
                 applyLineHeight(style)
-                applyLineSpacing(style)
                 applyTextDecoration(style)
 
                 with(style) {
