@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
                         Toast
                             .makeText(this@MainActivity, "On text click", Toast.LENGTH_SHORT)
                             .show()
-                    }，
+                    },
                     style = TextStyle(
                         textAlign = TextAlign.Justify,
                         lineHeight = 24.sp,
