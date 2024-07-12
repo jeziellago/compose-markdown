@@ -7,6 +7,8 @@ import android.text.util.Linkify
 import android.widget.TextView
 import androidx.annotation.FontRes
 import androidx.annotation.IdRes
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.compose.foundation.clickable
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
@@ -20,6 +22,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.widget.TextViewCompat
 import coil.ImageLoader
 import io.noties.markwon.Markwon
 
@@ -115,14 +118,13 @@ fun MarkdownText(
         }
 
     AndroidView(
-        modifier = modifier,
+        modifier = Modifier.clickable { onClick?.let { it() } }.then(modifier),
         factory = { factoryContext ->
 
             val linkTextColor = linkColor.takeOrElse { style.color.takeOrElse { defaultColor } }
 
-            TextView(factoryContext).apply {
+            CustomTextView(factoryContext).apply {
                 viewId?.let { id = viewId }
-                onClick?.let { setOnClickListener { onClick() } }
                 fontResource?.let { font -> applyFontResource(font) }
 
                 setMaxLines(maxLines)
@@ -136,7 +138,8 @@ fun MarkdownText(
 
                 autoSizeConfig?.let { config ->
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        setAutoSizeTextTypeUniformWithConfiguration(
+                        TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(
+                            this,
                             config.autoSizeMinTextSize,
                             config.autoSizeMaxTextSize,
                             config.autoSizeStepGranularity,
