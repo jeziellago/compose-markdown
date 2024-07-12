@@ -6,7 +6,7 @@ import android.text.style.ClickableSpan
 import android.view.MotionEvent
 import androidx.appcompat.widget.AppCompatTextView
 
-class CustomTextView(context: Context?) : AppCompatTextView(context!!) {
+class CustomTextView(context: Context) : AppCompatTextView(context) {
     override fun onTouchEvent(event: MotionEvent): Boolean {
         performClick()
         if (event.action == MotionEvent.ACTION_UP || event.action == MotionEvent.ACTION_DOWN) {
