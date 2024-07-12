@@ -7,19 +7,18 @@ import android.os.Build
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.util.TypedValue
-import android.view.View
+import android.view.Gravity
 import android.widget.TextView
 import androidx.annotation.FontRes
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontListFontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.font.FontWeight.Companion.ExtraBold
 import androidx.compose.ui.text.font.FontWeight.Companion.SemiBold
-import androidx.compose.ui.text.font.LoadedFontFamily
-import androidx.compose.ui.text.font.SystemFontFamily
+import androidx.compose.ui.text.font.createFontFamilyResolver
+import androidx.compose.ui.text.font.resolveAsTypeface
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.core.content.res.ResourcesCompat
@@ -47,13 +46,8 @@ fun TextView.applyFontStyle(fontStyle: FontStyle) {
     setTypeface(typeface, type)
 }
 
-//TODO: should implement the font loading by setting up the typeface on native TextView
 fun TextView.applyFontFamily(fontFamily: FontFamily) {
-    when(fontFamily) {
-        is SystemFontFamily -> {}
-        is FontListFontFamily -> {}
-        is LoadedFontFamily -> {}
-    }
+    typeface = createFontFamilyResolver(context).resolveAsTypeface(fontFamily).value
 }
 
 fun TextView.applyFontResource(@FontRes font: Int) {
@@ -88,11 +82,11 @@ fun TextView.applyLineHeight(textStyle: TextStyle) {
 }
 
 fun TextView.applyTextAlign(align: TextAlign) {
-    textAlignment = when (align) {
-        TextAlign.Left, TextAlign.Start -> View.TEXT_ALIGNMENT_TEXT_START
-        TextAlign.Right, TextAlign.End -> View.TEXT_ALIGNMENT_TEXT_END
-        TextAlign.Center -> View.TEXT_ALIGNMENT_CENTER
-        else -> View.TEXT_ALIGNMENT_TEXT_START
+    gravity = when (align) {
+        TextAlign.Left, TextAlign.Start -> Gravity.START
+        TextAlign.Right, TextAlign.End -> Gravity.END
+        TextAlign.Center -> Gravity.CENTER_HORIZONTAL
+        else -> Gravity.START
     }
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && align == TextAlign.Justify) {
