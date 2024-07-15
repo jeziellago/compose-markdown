@@ -1,6 +1,7 @@
 package dev.jeziellago.compose.markdown
 
 import android.os.Bundle
+import android.text.util.Linkify
 import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
@@ -74,6 +75,17 @@ class MainActivity : AppCompatActivity() {
                             ---
                         
                         """.trimIndent(),
+                )
+            }
+            item {
+                MarkdownText(
+                    markdown = """
+                        ## Selectable item
+                       
+                       This is a selectable text. You can select this text by long pressing on it.
+                       
+                """.trimIndent(),
+                    isTextSelectable = true
                 )
             }
             item {
