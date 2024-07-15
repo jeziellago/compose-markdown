@@ -7,19 +7,26 @@ import android.view.MotionEvent
 import androidx.appcompat.widget.AppCompatTextView
 
 class CustomTextView(context: Context) : AppCompatTextView(context) {
+
+    private var isTextSelectable: Boolean = false
+
     override fun onTouchEvent(event: MotionEvent): Boolean {
         performClick()
-        if (event.action == MotionEvent.ACTION_UP || event.action == MotionEvent.ACTION_DOWN) {
-            val link = getClickableSpans(event)
+        if (isTextSelectable) {
+            return super.onTouchEvent(event)
+        } else {
+            if (event.action == MotionEvent.ACTION_UP || event.action == MotionEvent.ACTION_DOWN) {
+                val link = getClickableSpans(event)
 
-            if (link.isNotEmpty()) {
-                if (event.action == MotionEvent.ACTION_UP) {
-                    link[0].onClick(this)
+                if (link.isNotEmpty()) {
+                    if (event.action == MotionEvent.ACTION_UP) {
+                        link[0].onClick(this)
+                    }
+                    return true
                 }
-                return true
             }
+            return false
         }
-        return false
     }
 
     private fun getClickableSpans(event: MotionEvent): Array<ClickableSpan> {
@@ -42,5 +49,10 @@ class CustomTextView(context: Context) : AppCompatTextView(context) {
 
     override fun performClick(): Boolean {
         return super.performClick()
+    }
+
+    override fun setTextIsSelectable(selectable: Boolean) {
+        super.setTextIsSelectable(selectable)
+        isTextSelectable = selectable
     }
 }
