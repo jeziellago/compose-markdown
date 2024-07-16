@@ -86,7 +86,8 @@ fun MarkdownText(
 fun MarkdownText(
     markdown: String,
     modifier: Modifier = Modifier,
-    linkColor: Color = Color.Unspecified,
+    linkStyle: LinkStyle = LinkStyle.Default,
+    linkColor: Color = linkStyle.color,
     truncateOnTextOverflow: Boolean = false,
     maxLines: Int = Int.MAX_VALUE,
     isTextSelectable: Boolean = false,
@@ -171,6 +172,9 @@ fun MarkdownText(
                 textView.post {
                     onTextLayout(textView.lineCount)
                 }
+            }
+            if (linkStyle.disableUnderline) {
+                textView.applyRemoveUrlUnderlines()
             }
             textView.maxLines = maxLines
         }
