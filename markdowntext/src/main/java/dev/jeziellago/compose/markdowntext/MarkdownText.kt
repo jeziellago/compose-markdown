@@ -4,10 +4,8 @@ import android.content.Context
 import android.os.Build
 import android.text.method.LinkMovementMethod
 import android.text.util.Linkify
-import android.widget.TextView
 import androidx.annotation.FontRes
 import androidx.annotation.IdRes
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.compose.foundation.clickable
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
@@ -117,8 +115,13 @@ fun MarkdownText(
             )
         }
 
+    val androidViewModifier = if (onClick != null) {
+        Modifier.clickable { onClick() }.then(modifier)
+    } else {
+        modifier
+    }
     AndroidView(
-        modifier = Modifier.clickable { onClick?.let { it() } }.then(modifier),
+        modifier = androidViewModifier,
         factory = { factoryContext ->
 
             val linkTextColor = linkColor.takeOrElse { style.color.takeOrElse { defaultColor } }
