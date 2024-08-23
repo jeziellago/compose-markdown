@@ -98,7 +98,8 @@ fun TextView.enableTextOverflow() {
     doOnNextLayout {
         if (maxLines != -1 && lineCount > maxLines) {
             val endOfLastLine = layout.getLineEnd(maxLines - 1)
-            val spannedDropLast3Chars = text.subSequence(0, endOfLastLine - 3) as? Spanned
+            val startIndex = maxOf(0, endOfLastLine - 3)
+            val spannedDropLast3Chars = text.subSequence(0, startIndex) as? Spanned
             if (spannedDropLast3Chars != null) {
                 val spannableBuilder = SpannableStringBuilder()
                     .append(spannedDropLast3Chars)
@@ -109,3 +110,4 @@ fun TextView.enableTextOverflow() {
         }
     }
 }
+
