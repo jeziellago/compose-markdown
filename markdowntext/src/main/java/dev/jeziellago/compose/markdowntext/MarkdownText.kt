@@ -2,8 +2,10 @@ package dev.jeziellago.compose.markdowntext
 
 import android.content.Context
 import android.os.Build
+import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.util.Linkify
+import android.widget.TextView
 import androidx.annotation.FontRes
 import androidx.annotation.IdRes
 import androidx.compose.foundation.clickable
@@ -48,6 +50,8 @@ fun MarkdownText(
     enableSoftBreakAddsNewLine: Boolean = true,
     syntaxHighlightColor: Color = Color.Red,
     headingBreakColor: Color = Color.Transparent,
+    beforeSetMarkdown: ((TextView, Spanned) -> Unit)? = null,
+    afterSetMarkdown: ((TextView) -> Unit)? = null,
     onLinkClicked: ((String) -> Unit)? = null,
     onTextLayout: ((numLines: Int) -> Unit)? = null
 ) {
@@ -77,6 +81,8 @@ fun MarkdownText(
         imageLoader = imageLoader,
         linkifyMask = linkifyMask,
         enableSoftBreakAddsNewLine = enableSoftBreakAddsNewLine,
+        beforeSetMarkdown = beforeSetMarkdown,
+        afterSetMarkdown = afterSetMarkdown,
         onLinkClicked = onLinkClicked,
         onTextLayout = onTextLayout,
         syntaxHighlightColor = syntaxHighlightColor,
@@ -105,6 +111,8 @@ fun MarkdownText(
     enableSoftBreakAddsNewLine: Boolean = true,
     syntaxHighlightColor: Color = Color.LightGray,
     headingBreakColor: Color = Color.Transparent,
+    beforeSetMarkdown: ((TextView, Spanned) -> Unit)? = null,
+    afterSetMarkdown: ((TextView) -> Unit)? = null,
     onLinkClicked: ((String) -> Unit)? = null,
     onTextLayout: ((numLines: Int) -> Unit)? = null
 ) {
@@ -119,6 +127,8 @@ fun MarkdownText(
                 enableSoftBreakAddsNewLine,
                 syntaxHighlightColor,
                 headingBreakColor,
+                beforeSetMarkdown,
+                afterSetMarkdown,
                 onLinkClicked,
             )
         }

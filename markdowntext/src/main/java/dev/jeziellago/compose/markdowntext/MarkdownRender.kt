@@ -1,6 +1,8 @@
 package dev.jeziellago.compose.markdowntext
 
 import android.content.Context
+import android.text.Spanned
+import android.widget.TextView
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import coil.ImageLoader
@@ -27,6 +29,8 @@ internal object MarkdownRender {
         enableSoftBreakAddsNewLine: Boolean,
         syntaxHighlightColor: Color,
         headingBreakColor: Color,
+        beforeSetMarkdown: ((TextView, Spanned) -> Unit)? = null,
+        afterSetMarkdown: ((TextView) -> Unit)? = null,
         onLinkClicked: ((String) -> Unit)? = null,
     ): Markwon {
         val coilImageLoader = imageLoader ?: context.imageLoader
@@ -44,6 +48,15 @@ internal object MarkdownRender {
             }
             .usePlugin(SyntaxHighlightPlugin(syntaxHighlightColor.toArgb()))
             .usePlugin(object : AbstractMarkwonPlugin() {
+
+                override fun beforeSetText(textView: TextView, markdown: Spanned) {
+                    beforeSetMarkdown?.invoke(textView, markdown)
+                }
+
+                override fun afterSetText(textView: TextView) {
+                    afterSetMarkdown?.invoke(textView)
+                }
+
                 override fun configureTheme(builder: MarkwonTheme.Builder) {
                     if (headingBreakColor == Color.Transparent) {
                         builder.headingBreakColor(1)
