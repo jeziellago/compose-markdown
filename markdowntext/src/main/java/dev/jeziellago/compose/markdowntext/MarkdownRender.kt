@@ -3,6 +3,7 @@ package dev.jeziellago.compose.markdowntext
 import android.content.Context
 import coil.ImageLoader
 import coil.imageLoader
+import dev.jeziellago.compose.markdowntext.plugins.syntaxhighlight.SyntaxHighlightPlugin
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonConfiguration
@@ -20,6 +21,7 @@ internal object MarkdownRender {
         imageLoader: ImageLoader?,
         linkifyMask: Int,
         enableSoftBreakAddsNewLine: Boolean,
+        syntaxHighlightColor: Int,
         onLinkClicked: ((String) -> Unit)? = null,
     ): Markwon {
         val coilImageLoader = imageLoader ?: context.imageLoader
@@ -34,6 +36,7 @@ internal object MarkdownRender {
                     usePlugin(SoftBreakAddsNewLinePlugin.create())
                 }
             }
+            .usePlugin(SyntaxHighlightPlugin(syntaxHighlightColor))
             .usePlugin(object : AbstractMarkwonPlugin() {
                 override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {
                     // Setting [MarkwonConfiguration.Builder.linkResolver] overrides

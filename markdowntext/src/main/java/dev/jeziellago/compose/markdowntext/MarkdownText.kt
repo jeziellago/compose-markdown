@@ -99,6 +99,7 @@ fun MarkdownText(
     imageLoader: ImageLoader? = null,
     linkifyMask: Int = Linkify.EMAIL_ADDRESSES or Linkify.PHONE_NUMBERS or Linkify.WEB_URLS,
     enableSoftBreakAddsNewLine: Boolean = true,
+    syntaxHighlightColor: Color = Color.LightGray,
     onLinkClicked: ((String) -> Unit)? = null,
     onTextLayout: ((numLines: Int) -> Unit)? = null
 ) {
@@ -111,7 +112,8 @@ fun MarkdownText(
                 imageLoader,
                 linkifyMask,
                 enableSoftBreakAddsNewLine,
-                onLinkClicked
+                syntaxHighlightColor.toArgb(),
+                onLinkClicked,
             )
         }
 
