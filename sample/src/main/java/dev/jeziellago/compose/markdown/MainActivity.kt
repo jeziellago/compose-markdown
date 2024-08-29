@@ -39,6 +39,15 @@ class MainActivity : AppCompatActivity() {
             item {
                 MarkdownText(
                     markdown = """
+                        - [x] Review #123
+                        - [ ] Complete XYZ
+                        - [ ] Add delight to the experience when all tasks are complete :tada:
+                """.trimIndent(),
+                )
+            }
+            item {
+                MarkdownText(
+                    markdown = """
                         ==text using syntax highlight==
                         
                         ---
