@@ -39,9 +39,20 @@ class MainActivity : AppCompatActivity() {
             item {
                 MarkdownText(
                     markdown = """
-                        ==my important text here==
+                        ==text using syntax highlight==
+                        
+                        ---
                 """.trimIndent(),
-                    isTextSelectable = true
+                )
+            }
+            item {
+                MarkdownText(
+                    markdown = """
+                        <h2>Head with heading break color blue</h2>
+                        
+                        ---
+                """.trimIndent(),
+                    headingBreakColor = Color.Blue
                 )
             }
             item {

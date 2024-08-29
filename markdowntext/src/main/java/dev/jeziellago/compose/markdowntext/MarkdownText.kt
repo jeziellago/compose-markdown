@@ -46,6 +46,8 @@ fun MarkdownText(
     imageLoader: ImageLoader? = null,
     linkifyMask: Int = Linkify.EMAIL_ADDRESSES or Linkify.PHONE_NUMBERS or Linkify.WEB_URLS,
     enableSoftBreakAddsNewLine: Boolean = true,
+    syntaxHighlightColor: Color = Color.Red,
+    headingBreakColor: Color = Color.Transparent,
     onLinkClicked: ((String) -> Unit)? = null,
     onTextLayout: ((numLines: Int) -> Unit)? = null
 ) {
@@ -77,6 +79,8 @@ fun MarkdownText(
         enableSoftBreakAddsNewLine = enableSoftBreakAddsNewLine,
         onLinkClicked = onLinkClicked,
         onTextLayout = onTextLayout,
+        syntaxHighlightColor = syntaxHighlightColor,
+        headingBreakColor = headingBreakColor,
     )
 }
 
@@ -100,6 +104,7 @@ fun MarkdownText(
     linkifyMask: Int = Linkify.EMAIL_ADDRESSES or Linkify.PHONE_NUMBERS or Linkify.WEB_URLS,
     enableSoftBreakAddsNewLine: Boolean = true,
     syntaxHighlightColor: Color = Color.LightGray,
+    headingBreakColor: Color = Color.Transparent,
     onLinkClicked: ((String) -> Unit)? = null,
     onTextLayout: ((numLines: Int) -> Unit)? = null
 ) {
@@ -112,7 +117,8 @@ fun MarkdownText(
                 imageLoader,
                 linkifyMask,
                 enableSoftBreakAddsNewLine,
-                syntaxHighlightColor.toArgb(),
+                syntaxHighlightColor,
+                headingBreakColor,
                 onLinkClicked,
             )
         }
