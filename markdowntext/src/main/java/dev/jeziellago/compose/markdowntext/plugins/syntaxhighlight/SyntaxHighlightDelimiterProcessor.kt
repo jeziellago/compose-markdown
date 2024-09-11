@@ -5,17 +5,22 @@ import org.commonmark.node.Text
 import org.commonmark.parser.delimiter.DelimiterProcessor
 import org.commonmark.parser.delimiter.DelimiterRun
 
-class SyntaxHighlightDelimiterProcessor : DelimiterProcessor {
-    override fun getOpeningCharacter(): Char = '='
+class SyntaxHighlightDelimiterProcessor(
+    private val openingCharacter: Char,
+    private val closingCharacter: Char,
+    private val minLength: Int,
+) : DelimiterProcessor {
 
-    override fun getClosingCharacter(): Char = '='
+    override fun getOpeningCharacter(): Char = openingCharacter
 
-    override fun getMinLength(): Int = 2
+    override fun getClosingCharacter(): Char = closingCharacter
+
+    override fun getMinLength(): Int = minLength
 
     override fun getDelimiterUse(opener: DelimiterRun, closer: DelimiterRun): Int {
-        return if (opener.length() >= 2 && closer.length() >= 2) {
+        return if (opener.length() >= minLength && closer.length() >= minLength) {
             // Use exactly two delimiters even if we have more, and don't care about internal openers/closers.
-            2
+            minLength
         } else {
             0
         }
@@ -23,7 +28,7 @@ class SyntaxHighlightDelimiterProcessor : DelimiterProcessor {
 
     override fun process(opener: Text, closer: Text, delimiterCount: Int) {
         // Wrap nodes between delimiters in SyntaxHighlight.
-        val syntaxHighlight: Node = SyntaxHighlight()
+        val syntaxHighlight: Node = SyntaxHighlight(opener.literal)
 
         var tmp = opener.next
         while (tmp != null && tmp !== closer) {

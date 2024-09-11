@@ -19,76 +19,10 @@ import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.widget.TextViewCompat
 import coil.ImageLoader
 import io.noties.markwon.Markwon
-
-@Deprecated(message = "The parameters `color`, `fontSize`, `textAlign` and `lineHeight` must be part of TextStyle.")
-@Composable
-fun MarkdownText(
-    markdown: String,
-    modifier: Modifier = Modifier,
-    color: Color = Color.Unspecified,
-    linkColor: Color = Color.Unspecified,
-    fontSize: TextUnit = TextUnit.Unspecified,
-    textAlign: TextAlign = TextAlign.Unspecified,
-    truncateOnTextOverflow: Boolean = false,
-    lineHeight: TextUnit = TextUnit.Unspecified,
-    maxLines: Int = Int.MAX_VALUE,
-    isTextSelectable: Boolean = false,
-    autoSizeConfig: AutoSizeConfig? = null,
-    @FontRes fontResource: Int? = null,
-    style: TextStyle = LocalTextStyle.current,
-    @IdRes viewId: Int? = null,
-    onClick: (() -> Unit)? = null,
-    disableLinkMovementMethod: Boolean = false,
-    imageLoader: ImageLoader? = null,
-    linkifyMask: Int = Linkify.EMAIL_ADDRESSES or Linkify.PHONE_NUMBERS or Linkify.WEB_URLS,
-    enableSoftBreakAddsNewLine: Boolean = true,
-    syntaxHighlightColor: Color = Color.Red,
-    headingBreakColor: Color = Color.Transparent,
-    beforeSetMarkdown: ((TextView, Spanned) -> Unit)? = null,
-    afterSetMarkdown: ((TextView) -> Unit)? = null,
-    onLinkClicked: ((String) -> Unit)? = null,
-    onTextLayout: ((numLines: Int) -> Unit)? = null
-) {
-
-    val mergedStyle = style.merge(
-        TextStyle(
-            color = color,
-            fontSize = if (fontSize != TextUnit.Unspecified) fontSize else style.fontSize,
-            textAlign = textAlign,
-            lineHeight = if (lineHeight != TextUnit.Unspecified) lineHeight else style.lineHeight,
-        )
-    )
-
-    MarkdownText(
-        markdown = markdown,
-        modifier = modifier,
-        linkColor = linkColor,
-        truncateOnTextOverflow = truncateOnTextOverflow,
-        maxLines = maxLines,
-        isTextSelectable = isTextSelectable,
-        autoSizeConfig = autoSizeConfig,
-        fontResource = fontResource,
-        style = mergedStyle,
-        viewId = viewId,
-        onClick = onClick,
-        disableLinkMovementMethod = disableLinkMovementMethod,
-        imageLoader = imageLoader,
-        linkifyMask = linkifyMask,
-        enableSoftBreakAddsNewLine = enableSoftBreakAddsNewLine,
-        beforeSetMarkdown = beforeSetMarkdown,
-        afterSetMarkdown = afterSetMarkdown,
-        onLinkClicked = onLinkClicked,
-        onTextLayout = onTextLayout,
-        syntaxHighlightColor = syntaxHighlightColor,
-        headingBreakColor = headingBreakColor,
-    )
-}
 
 @Composable
 fun MarkdownText(
@@ -110,6 +44,7 @@ fun MarkdownText(
     linkifyMask: Int = Linkify.EMAIL_ADDRESSES or Linkify.PHONE_NUMBERS or Linkify.WEB_URLS,
     enableSoftBreakAddsNewLine: Boolean = true,
     syntaxHighlightColor: Color = Color.LightGray,
+    syntaxHighlightTextColor: Color = Color.Unspecified,
     headingBreakColor: Color = Color.Transparent,
     beforeSetMarkdown: ((TextView, Spanned) -> Unit)? = null,
     afterSetMarkdown: ((TextView) -> Unit)? = null,
@@ -126,6 +61,7 @@ fun MarkdownText(
                 linkifyMask,
                 enableSoftBreakAddsNewLine,
                 syntaxHighlightColor,
+                syntaxHighlightTextColor,
                 headingBreakColor,
                 beforeSetMarkdown,
                 afterSetMarkdown,
@@ -134,7 +70,9 @@ fun MarkdownText(
         }
 
     val androidViewModifier = if (onClick != null) {
-        Modifier.clickable { onClick() }.then(modifier)
+        Modifier
+            .clickable { onClick() }
+            .then(modifier)
     } else {
         modifier
     }

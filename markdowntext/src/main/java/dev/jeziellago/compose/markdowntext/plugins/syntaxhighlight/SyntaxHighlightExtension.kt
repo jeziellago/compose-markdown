@@ -9,7 +9,13 @@ import org.commonmark.renderer.text.TextContentRenderer.TextContentRendererExten
 class SyntaxHighlightExtension private constructor() : ParserExtension,
     TextContentRendererExtension {
     override fun extend(parserBuilder: Parser.Builder) {
-        parserBuilder.customDelimiterProcessor(SyntaxHighlightDelimiterProcessor())
+        parserBuilder.customDelimiterProcessor(
+            SyntaxHighlightDelimiterProcessor(
+                openingCharacter = '=',
+                closingCharacter = '=',
+                minLength = 2,
+            ),
+        )
     }
 
     override fun extend(rendererBuilder: TextContentRenderer.Builder) {

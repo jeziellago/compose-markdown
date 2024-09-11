@@ -1,7 +1,6 @@
 package dev.jeziellago.compose.markdown
 
 import android.os.Bundle
-import android.text.util.Linkify
 import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
@@ -18,7 +17,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dev.jeziellago.compose.markdowntext.MarkdownText
 import dev.jeziellago.compose.markdown.sample.R
 import dev.jeziellago.compose.markdowntext.MarkdownText
 
@@ -47,8 +45,10 @@ class MainActivity : AppCompatActivity() {
             }
             item {
                 MarkdownText(
+                    syntaxHighlightColor = Color.Black,
+                    syntaxHighlightTextColor = Color.White,
                     markdown = """
-                        ==text using syntax highlight==
+                        Sometimes we need to ==highlight== a text in `different` ways.
                         
                         ---
                 """.trimIndent(),
