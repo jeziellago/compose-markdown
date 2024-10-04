@@ -117,6 +117,7 @@ fun MarkdownText(
 
                 with(style) {
                     applyTextAlign(textAlign)
+                    applyLetterSpacing(letterSpacing)
                     fontStyle?.let { applyFontStyle(it) }
                     fontWeight?.let { applyFontWeight(it) }
                     fontFamily?.let { applyFontFamily(it) }

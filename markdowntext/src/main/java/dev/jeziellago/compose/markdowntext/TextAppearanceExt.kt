@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.createFontFamilyResolver
 import androidx.compose.ui.text.font.resolveAsTypeface
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.TextUnit
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.doOnNextLayout
 import androidx.core.widget.TextViewCompat
@@ -91,6 +92,16 @@ fun TextView.applyTextAlign(align: TextAlign) {
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && align == TextAlign.Justify) {
         justificationMode = LineBreaker.JUSTIFICATION_MODE_INTER_WORD
+    }
+}
+
+fun TextView.applyLetterSpacing(letterSpacing: TextUnit) {
+    if (letterSpacing != TextUnit.Unspecified) {
+        if (letterSpacing.isSp) {
+            setLetterSpacing((letterSpacing.value * 0.0624).toFloat())
+        } else {
+            setLetterSpacing(letterSpacing.value)
+        }
     }
 }
 
