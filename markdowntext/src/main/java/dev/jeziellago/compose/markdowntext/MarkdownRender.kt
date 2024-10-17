@@ -1,6 +1,7 @@
 package dev.jeziellago.compose.markdowntext
 
 import android.content.Context
+import android.graphics.drawable.ColorDrawable
 import android.text.Spanned
 import android.widget.TextView
 import androidx.compose.ui.graphics.Color
@@ -14,11 +15,13 @@ import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonConfiguration
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
 import io.noties.markwon.core.MarkwonTheme
+import io.noties.markwon.ext.latex.JLatexMathPlugin
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
 import io.noties.markwon.ext.tables.TablePlugin
 import io.noties.markwon.ext.tasklist.TaskListPlugin
 import io.noties.markwon.html.HtmlPlugin
 import io.noties.markwon.image.coil.CoilImagesPlugin
+import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin
 import io.noties.markwon.linkify.LinkifyPlugin
 
 internal object MarkdownRender {
@@ -27,6 +30,9 @@ internal object MarkdownRender {
         context: Context,
         imageLoader: ImageLoader?,
         linkifyMask: Int,
+        textSizePx: Float,
+        textColor: Color,
+        backgroundColor: Color,
         enableSoftBreakAddsNewLine: Boolean,
         syntaxHighlightColor: Color,
         syntaxHighlightTextColor: Color,
@@ -49,6 +55,32 @@ internal object MarkdownRender {
             .usePlugin(TablePlugin.create(context))
             .usePlugin(LinkifyPlugin.create(linkifyMask))
             .usePlugin(TaskListPlugin.create(context))
+            .usePlugin(MarkwonInlineParserPlugin.create())
+            .usePlugin(JLatexMathPlugin.create(textSizePx) { builder ->
+                builder.inlinesEnabled(true)
+                builder.theme().backgroundProvider { ColorDrawable(backgroundColor.toArgb()) }
+
+                // text color of LaTeX content for both inlines and blocks
+                //  or more specific: `inlineTextColor` & `blockTextColor`
+                builder.theme().textColor(textColor.toArgb());
+
+//                // should block fit the whole canvas width, by default true
+//                builder.theme().blockFitCanvas(true);
+
+//                // horizontal alignment for block, by default ALIGN_CENTER
+//                builder.theme().blockHorizontalAlignment(JLatexMathDrawable.ALIGN_CENTER);
+
+//                // padding for both inlines and blocks
+//                builder.theme().padding(JLatexMathTheme.Padding.all(8));
+//
+//                // padding for inlines
+//                builder.theme().inlinePadding(JLatexMathTheme.Padding.symmetric(16, 8));
+//
+//                // padding for blocks
+//                builder.theme().blockPadding(new JLatexMathTheme . Padding (0, 1, 2, 3));
+
+
+            })
             .apply {
                 if (enableSoftBreakAddsNewLine) {
                     usePlugin(SoftBreakAddsNewLinePlugin.create())
