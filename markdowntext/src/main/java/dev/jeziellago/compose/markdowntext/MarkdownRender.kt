@@ -31,7 +31,7 @@ internal object MarkdownRender {
         syntaxHighlightColor: Color,
         syntaxHighlightTextColor: Color,
         headingBreakColor: Color,
-        enableUnderlineForLink:Boolean,
+        enableUnderlineForLink: Boolean,
         beforeSetMarkdown: ((TextView, Spanned) -> Unit)? = null,
         afterSetMarkdown: ((TextView) -> Unit)? = null,
         onLinkClicked: ((String) -> Unit)? = null,
