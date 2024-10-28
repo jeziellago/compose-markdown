@@ -43,7 +43,7 @@ import org.commonmark.node.ThematicBreak
 class MardownCorePlugin(
     private val syntaxHighlightColor: Int,
     private val syntaxHighlightTextColor: Int,
-    private val enableUnderlineForLink:Boolean,
+    private val enableUnderlineForLink: Boolean,
     private val onTextAddedListeners: MutableList<OnTextAddedListener> = ArrayList(0)
 ) : CorePlugin() {
 
