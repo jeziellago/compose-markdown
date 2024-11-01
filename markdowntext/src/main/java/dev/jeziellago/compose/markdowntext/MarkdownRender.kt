@@ -31,6 +31,7 @@ internal object MarkdownRender {
         syntaxHighlightColor: Color,
         syntaxHighlightTextColor: Color,
         headingBreakColor: Color,
+        enableUnderlineForLink: Boolean,
         beforeSetMarkdown: ((TextView, Spanned) -> Unit)? = null,
         afterSetMarkdown: ((TextView) -> Unit)? = null,
         onLinkClicked: ((String) -> Unit)? = null,
@@ -41,6 +42,7 @@ internal object MarkdownRender {
                 MardownCorePlugin(
                     syntaxHighlightColor.toArgb(),
                     syntaxHighlightTextColor.toArgb(),
+                    enableUnderlineForLink,
                 )
             )
             .usePlugin(HtmlPlugin.create())
