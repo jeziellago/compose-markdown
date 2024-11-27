@@ -119,9 +119,9 @@ fun MarkdownText(
 
                 with(style) {
                     applyTextAlign(textAlign)
+                    fontFamily?.let { applyFontFamily(it) }
                     fontStyle?.let { applyFontStyle(it) }
                     fontWeight?.let { applyFontWeight(it) }
-                    fontFamily?.let { applyFontFamily(it) }
                 }
             }
             markdownRender.setMarkdown(textView, markdown)
