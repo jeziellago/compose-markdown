@@ -43,6 +43,7 @@ import org.commonmark.node.ThematicBreak
 class MardownCorePlugin(
     private val syntaxHighlightColor: Int,
     private val syntaxHighlightTextColor: Int,
+    private val enableUnderlineForLink: Boolean,
     private val onTextAddedListeners: MutableList<OnTextAddedListener> = ArrayList(0)
 ) : CorePlugin() {
 
@@ -68,6 +69,7 @@ class MardownCorePlugin(
 
     override fun configureTheme(builder: MarkwonTheme.Builder) {
         builder.codeBackgroundColor(syntaxHighlightColor)
+        builder.isLinkUnderlined(enableUnderlineForLink)
         if (syntaxHighlightTextColor != Color.Unspecified.toArgb()) {
             builder.codeTextColor(syntaxHighlightTextColor)
         }

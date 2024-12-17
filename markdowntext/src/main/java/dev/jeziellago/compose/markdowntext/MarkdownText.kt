@@ -50,6 +50,7 @@ fun MarkdownText(
     syntaxHighlightColor: Color = Color.LightGray,
     syntaxHighlightTextColor: Color = Color.Unspecified,
     headingBreakColor: Color = Color.Transparent,
+    enableUnderlineForLink: Boolean = true,
     beforeSetMarkdown: ((TextView, Spanned) -> Unit)? = null,
     afterSetMarkdown: ((TextView) -> Unit)? = null,
     onLinkClicked: ((String) -> Unit)? = null,
@@ -78,6 +79,7 @@ fun MarkdownText(
                 syntaxHighlightColor,
                 syntaxHighlightTextColor,
                 headingBreakColor,
+                enableUnderlineForLink,
                 beforeSetMarkdown,
                 afterSetMarkdown,
                 onLinkClicked,
@@ -132,9 +134,9 @@ fun MarkdownText(
 
                 with(style) {
                     applyTextAlign(textAlign)
+                    fontFamily?.let { applyFontFamily(it) }
                     fontStyle?.let { applyFontStyle(it) }
                     fontWeight?.let { applyFontWeight(it) }
-                    fontFamily?.let { applyFontFamily(it) }
                 }
             }
             markdownRender.setMarkdown(textView, markdown)
