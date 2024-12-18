@@ -2,13 +2,16 @@ package dev.jeziellago.compose.markdowntext
 
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
+import android.os.Build.VERSION.SDK_INT
 import android.text.Spanned
 import android.widget.TextView
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import coil.ImageLoader
-import coil.imageLoader
+import coil.decode.GifDecoder
+import coil.decode.ImageDecoderDecoder
 import dev.jeziellago.compose.markdowntext.plugins.core.MardownCorePlugin
+import dev.jeziellago.compose.markdowntext.plugins.image.ImagesPlugin
 import dev.jeziellago.compose.markdowntext.plugins.syntaxhighlight.SyntaxHighlightPlugin
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
@@ -42,7 +45,16 @@ internal object MarkdownRender {
         afterSetMarkdown: ((TextView) -> Unit)? = null,
         onLinkClicked: ((String) -> Unit)? = null,
     ): Markwon {
-        val coilImageLoader = imageLoader ?: context.imageLoader
+        val coilImageLoader = imageLoader ?: ImageLoader.Builder(context)
+            .components {
+                if (SDK_INT >= 28) {
+                    add(ImageDecoderDecoder.Factory())
+                } else {
+                    add(GifDecoder.Factory())
+                }
+            }
+            .build()
+
         return Markwon.builderNoCore(context)
             .usePlugin(
                 MardownCorePlugin(
@@ -52,7 +64,7 @@ internal object MarkdownRender {
                 )
             )
             .usePlugin(HtmlPlugin.create())
-            .usePlugin(CoilImagesPlugin.create(context, coilImageLoader))
+            .usePlugin(ImagesPlugin.create(context, coilImageLoader))
             .usePlugin(StrikethroughPlugin.create())
             .usePlugin(TablePlugin.create(context))
             .usePlugin(LinkifyPlugin.create(linkifyMask))
@@ -61,27 +73,7 @@ internal object MarkdownRender {
             .usePlugin(JLatexMathPlugin.create(textSizePx) { builder ->
                 builder.inlinesEnabled(true)
                 builder.theme().backgroundProvider { ColorDrawable(backgroundColor.toArgb()) }
-
-                // text color of LaTeX content for both inlines and blocks
-                //  or more specific: `inlineTextColor` & `blockTextColor`
                 builder.theme().textColor(textColor.toArgb());
-
-//                // should block fit the whole canvas width, by default true
-//                builder.theme().blockFitCanvas(true);
-
-//                // horizontal alignment for block, by default ALIGN_CENTER
-//                builder.theme().blockHorizontalAlignment(JLatexMathDrawable.ALIGN_CENTER);
-
-//                // padding for both inlines and blocks
-//                builder.theme().padding(JLatexMathTheme.Padding.all(8));
-//
-//                // padding for inlines
-//                builder.theme().inlinePadding(JLatexMathTheme.Padding.symmetric(16, 8));
-//
-//                // padding for blocks
-//                builder.theme().blockPadding(new JLatexMathTheme . Padding (0, 1, 2, 3));
-
-
             })
             .apply {
                 if (enableSoftBreakAddsNewLine) {
