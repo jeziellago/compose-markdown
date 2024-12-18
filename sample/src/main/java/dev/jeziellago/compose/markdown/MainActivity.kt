@@ -36,10 +36,26 @@ class MainActivity : AppCompatActivity() {
         ) {
             item {
                 MarkdownText(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth(),
                     markdown = """
+                        ## Gif Images
+                        ![Image](https://user-images.githubusercontent.com/14011726/94132137-7d4fc100-fe7c-11ea-8512-69f90cb65e48.gif)
+                        
+                        ---
+                        """.trimIndent()
+                )
+            }
+            item {
+                MarkdownText(
+                    markdown = """
+                        ## Checks
                         - [x] Review #123
                         - [ ] Complete XYZ
                         - [ ] Add delight to the experience when all tasks are complete :tada:
+                        
+                        ---
                 """.trimIndent(),
                 )
             }
@@ -48,6 +64,7 @@ class MainActivity : AppCompatActivity() {
                     syntaxHighlightColor = Color.Black,
                     syntaxHighlightTextColor = Color.White,
                     markdown = """
+                        ## Text highlight
                         Sometimes we need to ==highlight== a text in `different` ways.
                         
                         ---

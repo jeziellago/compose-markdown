@@ -3,7 +3,6 @@ package dev.jeziellago.compose.markdowntext.plugins.core
 import androidx.annotation.VisibleForTesting
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import dev.jeziellago.compose.markdowntext.plugins.syntaxhighlight.SyntaxHighlight
 import io.noties.markwon.MarkwonSpansFactory
 import io.noties.markwon.MarkwonVisitor
 import io.noties.markwon.core.CorePlugin
@@ -85,7 +84,6 @@ class MardownCorePlugin(
             .setFactory(Emphasis::class.java, EmphasisSpanFactory())
             .setFactory(BlockQuote::class.java, BlockQuoteSpanFactory())
             .setFactory(Code::class.java, CodeSpanFactory())
-//            .setFactory(SyntaxHighlight::class.java, CodeSpanFactory())
             .setFactory(FencedCodeBlock::class.java, codeBlockSpanFactory)
             .setFactory(IndentedCodeBlock::class.java, codeBlockSpanFactory)
             .setFactory(ListItem::class.java, ListItemSpanFactory())
@@ -98,7 +96,6 @@ class MardownCorePlugin(
         onTextAddedListeners.add(onTextAddedListener)
         return this
     }
-
 
     private fun text(builder: MarkwonVisitor.Builder) {
         builder.on(
