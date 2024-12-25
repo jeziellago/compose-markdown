@@ -21,7 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.widget.TextViewCompat
-import coil.ImageLoader
+import coil3.ImageLoader
 import io.noties.markwon.Markwon
 
 @Composable

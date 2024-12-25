@@ -54,8 +54,11 @@ dependencies {
     // TODO: Change it after migrating markwon project
     implementation "com.github.jeziellago:Markwon:58aa5aba6a"
 
-    api("io.coil-kt:coil:2.6.0")
-    api("io.coil-kt:coil-gif:2.6.0")
+    final def coil_version = "3.0.4"
+
+    api("io.coil-kt.coil3:coil:$coil_version")
+    api("io.coil-kt.coil3:coil-network-okhttp:$coil_version")
+    api("io.coil-kt.coil3:coil-gif:$coil_version")
 
     // Jetpack Compose
     implementation "androidx.compose.ui:ui:$compose_version"
