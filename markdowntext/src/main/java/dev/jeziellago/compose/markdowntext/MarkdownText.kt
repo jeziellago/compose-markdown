@@ -5,6 +5,7 @@ import android.os.Build
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.util.Linkify
+import android.view.View
 import android.widget.TextView
 import androidx.annotation.FontRes
 import androidx.annotation.IdRes
@@ -47,6 +48,7 @@ fun MarkdownText(
     syntaxHighlightTextColor: Color = Color.Unspecified,
     headingBreakColor: Color = Color.Transparent,
     enableUnderlineForLink: Boolean = true,
+    importForAccessibility: Int = View.IMPORTANT_FOR_ACCESSIBILITY_AUTO,
     beforeSetMarkdown: ((TextView, Spanned) -> Unit)? = null,
     afterSetMarkdown: ((TextView) -> Unit)? = null,
     onLinkClicked: ((String) -> Unit)? = null,
@@ -87,6 +89,7 @@ fun MarkdownText(
             CustomTextView(factoryContext).apply {
                 viewId?.let { id = viewId }
                 fontResource?.let { font -> applyFontResource(font) }
+                importantForAccessibility = importForAccessibility
 
                 setMaxLines(maxLines)
                 setLinkTextColor(linkTextColor.toArgb())
@@ -119,7 +122,7 @@ fun MarkdownText(
 
                 with(style) {
                     applyTextAlign(textAlign)
-                    fontFamily?.let { applyFontFamily(it) }
+                    fontFamily?.let { applyFontFamily(this) }
                     fontStyle?.let { applyFontStyle(it) }
                     fontWeight?.let { applyFontWeight(it) }
                 }
