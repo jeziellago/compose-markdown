@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Compose Markdown</string>
+    <string name="test1">- The **coolio graph** shows your past 7 days of awesomeness readings, and your favorite toys can be found in the chest.\n\n- The **capture arrow** indicates if your gremlin is rising or falling, while the **+Jump** button allows you to capture important gremlins throughout the day.\n\n- The **fly range** is the purple region. TikTok displays your **XYZ** on the left of the screen, which is how long you stayed in the target zone.</string>
 </resources>

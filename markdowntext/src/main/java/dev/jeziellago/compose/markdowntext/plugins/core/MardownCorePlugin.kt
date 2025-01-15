@@ -267,25 +267,26 @@ class MardownCorePlugin(
             ListItem::class.java
         ) { visitor, listItem ->
             val length = visitor.length()
+            // it's important to visit children before applying render props (
+            // we can have nested children, who are list items also, thus they will
+            // override out props (if we set them before visiting children)
             visitor.visitChildren(listItem)
-    
+
             val parent: Node = listItem.parent
             if (parent is OrderedList) {
                 val start = parent.startNumber
+
                 CoreProps.LIST_ITEM_TYPE[visitor.renderProps()] = CoreProps.ListItemType.ORDERED
                 CoreProps.ORDERED_LIST_ITEM_NUMBER[visitor.renderProps()] = start
-                parent.startNumber += 1
+
+                // after we have visited the children increment start number
+                val orderedList = parent
+                orderedList.startNumber += 1
             } else {
                 CoreProps.LIST_ITEM_TYPE[visitor.renderProps()] = CoreProps.ListItemType.BULLET
                 CoreProps.BULLET_LIST_ITEM_LEVEL[visitor.renderProps()] = listLevel(listItem)
             }
-    
-            // Apply font size to bullet points
-            val bulletSpan = AbsoluteSizeSpan(fontSize.spValue, true)
-            val span = visitor.factory.spansForProps(visitor.renderProps(), length)
-            span.add(bulletSpan)
-            visitor.builder().setSpan(bulletSpan, length, length + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-    
+
             visitor.setSpansForNodeOptional(listItem, length)
             if (visitor.hasNext(listItem)) {
                 visitor.ensureNewLine()
