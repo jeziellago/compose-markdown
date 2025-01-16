@@ -6,6 +6,7 @@ import android.text.Spanned
 import android.widget.TextView
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.text.TextStyle
 import coil.ImageLoader
 import coil.decode.GifDecoder
 import coil.decode.ImageDecoderDecoder
@@ -37,6 +38,7 @@ internal object MarkdownRender {
         beforeSetMarkdown: ((TextView, Spanned) -> Unit)? = null,
         afterSetMarkdown: ((TextView) -> Unit)? = null,
         onLinkClicked: ((String) -> Unit)? = null,
+        style: TextStyle
     ): Markwon {
         val coilImageLoader = imageLoader ?: ImageLoader.Builder(context)
             .components {
@@ -84,6 +86,7 @@ internal object MarkdownRender {
                     } else {
                         builder.headingBreakColor(headingBreakColor.toArgb())
                     }
+                    builder.bulletWidth(style.fontSize.value.toInt())
                 }
 
                 override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {

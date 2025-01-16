@@ -68,6 +68,7 @@ fun MarkdownText(
                 beforeSetMarkdown,
                 afterSetMarkdown,
                 onLinkClicked,
+                style
             )
         }
 
