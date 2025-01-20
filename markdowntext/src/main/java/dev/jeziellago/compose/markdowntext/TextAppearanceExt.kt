@@ -11,8 +11,8 @@ import android.view.Gravity
 import android.widget.TextView
 import androidx.annotation.FontRes
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontSynthesis
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.text.font.FontWeight.Companion.ExtraBold
@@ -46,8 +46,13 @@ fun TextView.applyFontStyle(fontStyle: FontStyle) {
     setTypeface(typeface, type)
 }
 
-fun TextView.applyFontFamily(fontFamily: FontFamily) {
-    typeface = createFontFamilyResolver(context).resolveAsTypeface(fontFamily).value
+fun TextView.applyFontFamily(textStyle: TextStyle) {
+    typeface = createFontFamilyResolver(context).resolveAsTypeface(
+        fontFamily = textStyle.fontFamily,
+        fontWeight = textStyle.fontWeight ?: FontWeight.Normal,
+        fontStyle = textStyle.fontStyle ?: FontStyle.Normal,
+        fontSynthesis = textStyle.fontSynthesis ?: FontSynthesis.All,
+    ).value
 }
 
 fun TextView.applyFontResource(@FontRes font: Int) {
