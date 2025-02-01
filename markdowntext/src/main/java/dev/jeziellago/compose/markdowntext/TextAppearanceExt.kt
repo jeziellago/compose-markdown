@@ -4,8 +4,12 @@ import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.text.LineBreaker
 import android.os.Build
+import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.Spanned
+import android.text.TextPaint
+import android.text.style.URLSpan
+import android.text.style.UnderlineSpan
 import android.util.TypedValue
 import android.view.Gravity
 import android.widget.TextView
@@ -22,6 +26,7 @@ import androidx.compose.ui.text.font.resolveAsTypeface
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.text.getSpans
 import androidx.core.view.doOnNextLayout
 import androidx.core.widget.TextViewCompat
 
@@ -70,6 +75,22 @@ fun TextView.applyFontSize(textStyle: TextStyle) {
 fun TextView.applyTextDecoration(textStyle: TextStyle) {
     if (textStyle.textDecoration == TextDecoration.LineThrough) {
         paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+    }
+}
+
+fun TextView.applyRemoveUrlUnderlines() {
+    val noUnderlineSpan = object : UnderlineSpan() {
+        override fun updateDrawState(textPaint: TextPaint) {
+            textPaint.isUnderlineText = false
+            super.updateDrawState(textPaint)
+        }
+    }
+    when (val text = this.text) {
+        is Spannable -> {
+            text.getSpans<URLSpan>(0, text.length).forEach { span ->
+                text.setSpan(noUnderlineSpan, text.getSpanStart(span), text.getSpanEnd(span), 0)
+            }
+        }
     }
 }
 
