@@ -29,6 +29,7 @@ internal object MarkdownRender {
     fun create(
         context: Context,
         imageLoader: ImageLoader?,
+        coilStore: ImagesPlugin.CoilStore? = null,
         linkifyMask: Int,
         enableSoftBreakAddsNewLine: Boolean,
         syntaxHighlightColor: Color,
@@ -59,7 +60,7 @@ internal object MarkdownRender {
                 )
             )
             .usePlugin(HtmlPlugin.create())
-            .usePlugin(ImagesPlugin.create(context, coilImageLoader))
+            .usePlugin(ImagesPlugin.create(context, coilImageLoader, coilStore))
             .usePlugin(StrikethroughPlugin.create())
             .usePlugin(TablePlugin.create(context))
             .usePlugin(LinkifyPlugin.create(linkifyMask))

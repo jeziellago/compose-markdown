@@ -23,6 +23,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.widget.TextViewCompat
 import coil.ImageLoader
+import dev.jeziellago.compose.markdowntext.plugins.image.ImagesPlugin
 import io.noties.markwon.Markwon
 
 @Composable
@@ -42,6 +43,7 @@ fun MarkdownText(
     // it also enable the parent view to receive the click event
     disableLinkMovementMethod: Boolean = false,
     imageLoader: ImageLoader? = null,
+    coilStore: ImagesPlugin.CoilStore? = null,
     linkifyMask: Int = Linkify.EMAIL_ADDRESSES or Linkify.PHONE_NUMBERS or Linkify.WEB_URLS,
     enableSoftBreakAddsNewLine: Boolean = true,
     syntaxHighlightColor: Color = Color.LightGray,
@@ -61,6 +63,7 @@ fun MarkdownText(
             MarkdownRender.create(
                 context,
                 imageLoader,
+                coilStore,
                 linkifyMask,
                 enableSoftBreakAddsNewLine,
                 syntaxHighlightColor,
