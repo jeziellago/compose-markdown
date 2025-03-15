@@ -26,6 +26,9 @@ import coil.ImageLoader
 import dev.jeziellago.compose.markdowntext.plugins.image.ImagesPlugin
 import io.noties.markwon.Markwon
 
+/**
+ * @param onLinkClicked handle the url and return a boolean indicated consumed, if return true, default url handler will not handle the link; if return false, default link handler will take it
+ */
 @Composable
 fun MarkdownText(
     markdown: String,
@@ -53,7 +56,7 @@ fun MarkdownText(
     importForAccessibility: Int = View.IMPORTANT_FOR_ACCESSIBILITY_AUTO,
     beforeSetMarkdown: ((TextView, Spanned) -> Unit)? = null,
     afterSetMarkdown: ((TextView) -> Unit)? = null,
-    onLinkClicked: ((String) -> Unit)? = null,
+    onLinkClicked: (String) -> Boolean = {false},
     onTextLayout: ((numLines: Int) -> Unit)? = null
 ) {
     val defaultColor: Color = LocalContentColor.current
