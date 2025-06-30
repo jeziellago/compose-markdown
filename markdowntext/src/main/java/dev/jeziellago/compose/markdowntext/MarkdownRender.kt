@@ -1,6 +1,7 @@
 package dev.jeziellago.compose.markdowntext
 
 import android.content.Context
+import android.graphics.drawable.ColorDrawable
 import android.os.Build.VERSION.SDK_INT
 import android.text.Spanned
 import android.widget.TextView
@@ -18,10 +19,13 @@ import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonConfiguration
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
 import io.noties.markwon.core.MarkwonTheme
+import io.noties.markwon.ext.latex.JLatexMathPlugin
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
 import io.noties.markwon.ext.tables.TablePlugin
 import io.noties.markwon.ext.tasklist.TaskListPlugin
 import io.noties.markwon.html.HtmlPlugin
+import io.noties.markwon.image.coil.CoilImagesPlugin
+import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin
 import io.noties.markwon.linkify.LinkifyPlugin
 
 internal object MarkdownRender {
@@ -30,6 +34,9 @@ internal object MarkdownRender {
         context: Context,
         imageLoader: ImageLoader?,
         linkifyMask: Int,
+        textSizePx: Float,
+        textColor: Color,
+        backgroundColor: Color,
         enableSoftBreakAddsNewLine: Boolean,
         syntaxHighlightColor: Color,
         syntaxHighlightTextColor: Color,
@@ -64,6 +71,12 @@ internal object MarkdownRender {
             .usePlugin(TablePlugin.create(context))
             .usePlugin(LinkifyPlugin.create(linkifyMask))
             .usePlugin(TaskListPlugin.create(context))
+            .usePlugin(MarkwonInlineParserPlugin.create())
+            .usePlugin(JLatexMathPlugin.create(textSizePx) { builder ->
+                builder.inlinesEnabled(true)
+                builder.theme().backgroundProvider { ColorDrawable(backgroundColor.toArgb()) }
+                builder.theme().textColor(textColor.toArgb());
+            })
             .apply {
                 if (enableSoftBreakAddsNewLine) {
                     usePlugin(SoftBreakAddsNewLinePlugin.create())
