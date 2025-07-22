@@ -2,16 +2,16 @@ plugins {
     id 'com.android.library'
     id 'kotlin-android'
     id 'maven-publish'
+    id 'org.jetbrains.kotlin.plugin.compose' version '2.2.0'
 }
 
 android {
-    compileSdkVersion 34
-    buildToolsVersion "34.0.0"
+    compileSdk 36
     namespace 'dev.jeziellago.compose.markdown'
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 34
+        minSdk 26
+        targetSdk 36
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -26,21 +26,21 @@ android {
     buildFeatures {
         compose true
     }
+    kotlin {
+        jvmToolchain(21)
+    }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion '1.5.12'
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
     }
 }
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.13.1'
-    implementation 'androidx.appcompat:appcompat:1.7.0'
+    // Compose BOM (Bill of Materials) - matches your app
+    implementation platform("androidx.compose:compose-bom:2025.07.00")
+    
+    implementation 'androidx.core:core-ktx:1.16.0'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
 
     final def markwon_version = '4.6.2'
 
@@ -54,12 +54,12 @@ dependencies {
     // TODO: Change it after migrating markwon project
     implementation "com.github.jeziellago:Markwon:58aa5aba6a"
 
-    api("io.coil-kt:coil:2.6.0")
-    api("io.coil-kt:coil-gif:2.6.0")
+    api("io.coil-kt:coil:2.7.0")
+    api("io.coil-kt:coil-gif:2.7.0")
 
-    // Jetpack Compose
-    implementation "androidx.compose.ui:ui:$compose_version"
-    implementation "androidx.compose.material3:material3:1.2.1"
+    // Jetpack Compose - versions from BOM
+    implementation "androidx.compose.ui:ui"
+    implementation "androidx.compose.material3:material3"
 }
 
 afterEvaluate {
@@ -70,7 +70,7 @@ afterEvaluate {
 
                 groupId = 'dev.jeziellago'
                 artifactId = 'compose-markdown'
-                version = library_version
+                version = '1.0.0-local'
             }
         }
     }
