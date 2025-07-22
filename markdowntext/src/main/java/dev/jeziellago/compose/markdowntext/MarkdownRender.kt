@@ -13,6 +13,7 @@ import coil.decode.ImageDecoderDecoder
 import dev.jeziellago.compose.markdowntext.plugins.core.MardownCorePlugin
 import dev.jeziellago.compose.markdowntext.plugins.image.ImagesPlugin
 import dev.jeziellago.compose.markdowntext.plugins.syntaxhighlight.SyntaxHighlightPlugin
+import dev.jeziellago.compose.markdowntext.CustomTaskListPlugin
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonConfiguration
@@ -34,6 +35,9 @@ internal object MarkdownRender {
         syntaxHighlightColor: Color,
         syntaxHighlightTextColor: Color,
         headingBreakColor: Color,
+        checkboxColor: Color,
+        checkedCheckboxColor: Color,
+        checkmarkColor: Color,
         enableUnderlineForLink: Boolean,
         beforeSetMarkdown: ((TextView, Spanned) -> Unit)? = null,
         afterSetMarkdown: ((TextView) -> Unit)? = null,
@@ -63,7 +67,7 @@ internal object MarkdownRender {
             .usePlugin(StrikethroughPlugin.create())
             .usePlugin(TablePlugin.create(context))
             .usePlugin(LinkifyPlugin.create(linkifyMask))
-            .usePlugin(TaskListPlugin.create(context))
+            .usePlugin(CustomTaskListPlugin.create(checkboxColor, checkedCheckboxColor, checkmarkColor))
             .apply {
                 if (enableSoftBreakAddsNewLine) {
                     usePlugin(SoftBreakAddsNewLinePlugin.create())
