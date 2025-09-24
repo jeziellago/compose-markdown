@@ -1,6 +1,6 @@
 # MarkdownText - Jetpack Compose
 [![](https://androidweekly.net/issues/issue-456/badge)](https://androidweekly.net/issues/issue-456)
-[![Android CI](https://github.com/jeziellago/compose-markdown/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/jeziellago/compose-markdown/actions/workflows/ci.yml) [![](https://jitpack.io/v/jeziellago/compose-markdown.svg)](https://jitpack.io/#jeziellago/compose-markdown)
+[![Android CI](https://github.com/jeziellago/compose-markdown/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/jeziellago/compose-markdown/actions/workflows/ci.yml) [![Android CI](https://github.com/jeziellago/compose-markdown/actions/workflows/android-test.yml/badge.svg?branch=main)](https://github.com/jeziellago/compose-markdown/actions/workflows/android-test.yml) [![](https://jitpack.io/v/jeziellago/compose-markdown.svg)](https://jitpack.io/#jeziellago/compose-markdown)
 
 [![Video]()](https://github.com/jeziellago/compose-markdown/assets/8452419/0e17e3d9-4eb1-44cb-8b63-5056fe74395e)
 - Markdown
