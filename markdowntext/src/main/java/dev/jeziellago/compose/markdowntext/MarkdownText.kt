@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.annotation.FontRes
 import androidx.annotation.IdRes
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
@@ -33,6 +34,7 @@ fun MarkdownText(
     truncateOnTextOverflow: Boolean = false,
     maxLines: Int = Int.MAX_VALUE,
     isTextSelectable: Boolean = false,
+    textSelectionColors: TextSelectionColors? = null,
     autoSizeConfig: AutoSizeConfig? = null,
     @FontRes fontResource: Int? = null,
     style: TextStyle = LocalTextStyle.current,
@@ -122,6 +124,7 @@ fun MarkdownText(
                 applyFontSize(style)
                 applyLineHeight(style)
                 applyTextDecoration(style)
+                textSelectionColors?.let { applyTextSelectionColors(it) }
 
                 with(style) {
                     applyTextAlign(textAlign)
