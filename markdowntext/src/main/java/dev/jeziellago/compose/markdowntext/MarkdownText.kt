@@ -51,6 +51,7 @@ fun MarkdownText(
     headingBreakColor: Color = Color.Transparent,
     enableUnderlineForLink: Boolean = true,
     importForAccessibility: Int = View.IMPORTANT_FOR_ACCESSIBILITY_AUTO,
+    wrapMultilineTextWidth: Boolean = false,
     beforeSetMarkdown: ((TextView, Spanned) -> Unit)? = null,
     afterSetMarkdown: ((TextView) -> Unit)? = null,
     onLinkClicked: ((String) -> Unit)? = null,
@@ -97,6 +98,7 @@ fun MarkdownText(
                 setMaxLines(maxLines)
                 setLinkTextColor(linkTextColor.toArgb())
 
+                this.wrapMultilineTextWidth = wrapMultilineTextWidth
                 setTextIsSelectable(isTextSelectable)
 
                 movementMethod = LinkMovementMethod.getInstance()
