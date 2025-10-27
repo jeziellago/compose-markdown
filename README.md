@@ -9,6 +9,7 @@
 - Highlight
 - Linkfy
 - Table
+- Latex
 ## Setup
 1. Open the file `settings.gradle` (it looks like that)
 ```groovy

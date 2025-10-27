@@ -13,14 +13,18 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.widget.TextViewCompat
 import coil.ImageLoader
@@ -57,13 +61,24 @@ fun MarkdownText(
     onTextLayout: ((numLines: Int) -> Unit)? = null
 ) {
     val defaultColor: Color = LocalContentColor.current
+    val textColor = MaterialTheme.colorScheme.onSurface
+    val backgroundColor = MaterialTheme.colorScheme.surface
     val context: Context = LocalContext.current
+    val density = LocalDensity.current
+    val fontSize = if (style.fontSize != TextUnit.Unspecified) {
+        style.fontSize.value * density.density
+    } else {
+        16f * density.density // Fallback to a default size
+    }
     val markdownRender: Markwon =
         remember {
             MarkdownRender.create(
                 context,
                 imageLoader,
                 linkifyMask,
+                fontSize,
+                textColor,
+                backgroundColor,
                 enableSoftBreakAddsNewLine,
                 syntaxHighlightColor,
                 syntaxHighlightTextColor,
