@@ -10,6 +10,8 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.widget.TextView
 import androidx.annotation.FontRes
+import androidx.compose.foundation.text.selection.TextSelectionColors
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontSynthesis
@@ -22,6 +24,7 @@ import androidx.compose.ui.text.font.resolveAsTypeface
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.doOnNextLayout
 import androidx.core.widget.TextViewCompat
 
@@ -97,6 +100,17 @@ fun TextView.applyTextAlign(align: TextAlign) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && align == TextAlign.Justify) {
         justificationMode = LineBreaker.JUSTIFICATION_MODE_INTER_WORD
     }
+}
+
+fun TextView.applyTextSelectionColors(textSelectionColors: TextSelectionColors) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        val handleColor = textSelectionColors.handleColor.toArgb()
+        textSelectHandleLeft?.let { DrawableCompat.setTint(it, handleColor) }
+        textSelectHandleRight?.let { DrawableCompat.setTint(it, handleColor) }
+        textSelectHandle?.let { DrawableCompat.setTint(it, handleColor) }
+    }
+
+    highlightColor = textSelectionColors.backgroundColor.toArgb()
 }
 
 fun TextView.enableTextOverflow() {
