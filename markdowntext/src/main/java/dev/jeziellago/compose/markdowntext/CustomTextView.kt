@@ -32,7 +32,9 @@ class CustomTextView(context: Context) : AppCompatTextView(context) {
 
     override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
         if (selectionStart < 0 || selectionEnd < 0) {
-            Selection.setSelection(text as Spannable, text.length)
+            (text as? Spannable)?.let {
+                Selection.setSelection(it, it.length)
+            }
         } else if (selectionStart != selectionEnd) {
             if (event?.actionMasked == MotionEvent.ACTION_DOWN) {
                 val text = getText()
