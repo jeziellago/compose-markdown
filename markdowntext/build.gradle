@@ -56,6 +56,8 @@ dependencies {
     implementation "io.noties.markwon:html:$markwon_version"
     implementation "io.noties.markwon:linkify:$markwon_version"
     implementation "io.noties.markwon:ext-tasklist:$markwon_version"
+    implementation "io.noties.markwon:inline-parser:$markwon_version"
+    implementation "io.noties.markwon:ext-latex:$markwon_version"
 
     // TODO: Change it after migrating markwon project
     implementation "com.github.jeziellago:Markwon:58aa5aba6a"
