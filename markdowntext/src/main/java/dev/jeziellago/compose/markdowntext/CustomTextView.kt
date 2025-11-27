@@ -3,6 +3,7 @@ package dev.jeziellago.compose.markdowntext
 import android.content.Context
 import android.graphics.Canvas
 import android.text.Layout
+import android.text.Selection
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ClickableSpan
@@ -108,6 +109,21 @@ class CustomTextView : AppCompatTextView {
             }
             return false
         }
+    }
+
+    override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
+        if (selectionStart < 0 || selectionEnd < 0) {
+            (text as? Spannable)?.let {
+                Selection.setSelection(it, it.length)
+            }
+        } else if (selectionStart != selectionEnd) {
+            if (event?.actionMasked == MotionEvent.ACTION_DOWN) {
+                val text = getText()
+                setText(null)
+                setText(text)
+            }
+        }
+        return super.dispatchTouchEvent(event)
     }
 
     private fun getClickableSpans(event: MotionEvent): Array<ClickableSpan> {
