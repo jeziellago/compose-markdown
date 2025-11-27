@@ -32,7 +32,7 @@ class CustomTextView : AppCompatTextView {
 
     private var extraPaddingRight: Int? = null
     private var isTextSelectable: Boolean = false
-    var wrapMultilineTextWidth: Boolean = true
+    var wrapMultilineTextWidth: Boolean = false
 
     constructor(context: Context) :
             super(context, null, android.R.attr.textViewStyle)
