@@ -46,7 +46,7 @@ val markdownContent = """
 	* [Link](https://example.com)  
 	![Image](https://example.com/img.png)  
 	<a href="https://www.google.com/">Google</a>  
-"""
+""".trimIndent()
 
 //Minimal example
 @Composable  
