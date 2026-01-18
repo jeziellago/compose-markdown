@@ -84,6 +84,23 @@ class MainActivity : AppCompatActivity() {
             item {
                 MarkdownText(
                     markdown = """
+                        ### Latex
+                        inline equations like: $$ E = mc^2 $$ coz who doesn't love this equation
+                """.trimIndent(),
+                    headingBreakColor = Color.Blue
+                )
+            }
+            item {
+                MarkdownText(
+                    markdown = """
+                        $$\text{A long division \longdiv{12345}{13}$$
+                """.trimIndent(),
+                    headingBreakColor = Color.Blue
+                )
+            }
+            item {
+                MarkdownText(
+                    markdown = """
                             ## Custom font
 
                             This text is using OpenSans Regular. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
