@@ -24,8 +24,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.widget.TextViewCompat
 import coil.ImageLoader
+import dev.jeziellago.compose.markdowntext.plugins.image.ImagesPlugin
 import io.noties.markwon.Markwon
 
+/**
+ * @param onLinkClicked handle the url and return a boolean indicated consumed, if return true, default url handler will not handle the link; if return false, default link handler will take it
+ */
 @Composable
 fun MarkdownText(
     markdown: String,
@@ -44,6 +48,7 @@ fun MarkdownText(
     // it also enable the parent view to receive the click event
     disableLinkMovementMethod: Boolean = false,
     imageLoader: ImageLoader? = null,
+    coilStore: ImagesPlugin.CoilStore? = null,
     linkifyMask: Int = Linkify.EMAIL_ADDRESSES or Linkify.PHONE_NUMBERS or Linkify.WEB_URLS,
     enableSoftBreakAddsNewLine: Boolean = true,
     syntaxHighlightColor: Color = Color.LightGray,
@@ -53,7 +58,7 @@ fun MarkdownText(
     importForAccessibility: Int = View.IMPORTANT_FOR_ACCESSIBILITY_AUTO,
     beforeSetMarkdown: ((TextView, Spanned) -> Unit)? = null,
     afterSetMarkdown: ((TextView) -> Unit)? = null,
-    onLinkClicked: ((String) -> Unit)? = null,
+    onLinkClicked: (String) -> Boolean = {false},
     onTextLayout: ((numLines: Int) -> Unit)? = null
 ) {
     val defaultColor: Color = LocalContentColor.current
@@ -63,6 +68,7 @@ fun MarkdownText(
             MarkdownRender.create(
                 context,
                 imageLoader,
+                coilStore,
                 linkifyMask,
                 enableSoftBreakAddsNewLine,
                 syntaxHighlightColor,

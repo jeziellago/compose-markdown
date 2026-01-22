@@ -14,6 +14,7 @@ import dev.jeziellago.compose.markdowntext.plugins.core.MardownCorePlugin
 import dev.jeziellago.compose.markdowntext.plugins.image.ImagesPlugin
 import dev.jeziellago.compose.markdowntext.plugins.syntaxhighlight.SyntaxHighlightPlugin
 import io.noties.markwon.AbstractMarkwonPlugin
+import io.noties.markwon.LinkResolverDef
 import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonConfiguration
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
@@ -29,6 +30,7 @@ internal object MarkdownRender {
     fun create(
         context: Context,
         imageLoader: ImageLoader?,
+        coilStore: ImagesPlugin.CoilStore? = null,
         linkifyMask: Int,
         enableSoftBreakAddsNewLine: Boolean,
         syntaxHighlightColor: Color,
@@ -37,7 +39,7 @@ internal object MarkdownRender {
         enableUnderlineForLink: Boolean,
         beforeSetMarkdown: ((TextView, Spanned) -> Unit)? = null,
         afterSetMarkdown: ((TextView) -> Unit)? = null,
-        onLinkClicked: ((String) -> Unit)? = null,
+        onLinkClicked: (String) -> Boolean = {false},
         style: TextStyle
     ): Markwon {
         val coilImageLoader = imageLoader ?: ImageLoader.Builder(context)
@@ -59,7 +61,7 @@ internal object MarkdownRender {
                 )
             )
             .usePlugin(HtmlPlugin.create())
-            .usePlugin(ImagesPlugin.create(context, coilImageLoader))
+            .usePlugin(ImagesPlugin.create(context, coilImageLoader, coilStore))
             .usePlugin(StrikethroughPlugin.create())
             .usePlugin(TablePlugin.create(context))
             .usePlugin(LinkifyPlugin.create(linkifyMask))
@@ -94,10 +96,13 @@ internal object MarkdownRender {
                     // Markwon's default behaviour - see Markwon's [LinkResolverDef]
                     // and how it's used in [MarkwonConfiguration.Builder].
                     // Only use it if the client explicitly wants to handle link clicks.
-                    onLinkClicked ?: return
-                    builder.linkResolver { _, link ->
+                    val defaultLinkResolver = LinkResolverDef()
+                    builder.linkResolver { view, link ->
                         // handle individual clicks on Textview link
-                        onLinkClicked.invoke(link)
+                        // if user's handler return false, will use default handler
+                        if(onLinkClicked(link).not()) {
+                            defaultLinkResolver.resolve(view, link)
+                        }
                     }
                 }
             })
