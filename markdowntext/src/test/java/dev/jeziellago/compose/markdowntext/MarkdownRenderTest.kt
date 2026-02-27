@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 import androidx.test.core.app.ApplicationProvider
-import coil.ImageLoader
+import coil3.ImageLoader
 import io.mockk.*
 import io.noties.markwon.Markwon
 import org.junit.Before

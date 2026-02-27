@@ -1,14 +1,17 @@
 package dev.jeziellago.compose.markdowntext.plugins.image
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.drawable.Animatable
 import android.graphics.drawable.Drawable
 import android.text.Spanned
 import android.widget.TextView
-import coil.ImageLoader
-import coil.request.Disposable
-import coil.request.ImageRequest
-import coil.target.Target
+import coil3.Image
+import coil3.ImageLoader
+import coil3.asDrawable
+import coil3.request.Disposable
+import coil3.request.ImageRequest
+import coil3.target.Target
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.MarkwonConfiguration
 import io.noties.markwon.MarkwonSpansFactory
@@ -22,10 +25,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 class ImagesPlugin private constructor(
     private val imageLoader: ImageLoader,
     private val coilStore: CoilStore,
-    private val imageDrawableLoader: AnimatedImageDrawableLoader = AnimatedImageDrawableLoader(
-        coilStore,
-        imageLoader
-    )
+    private val imageDrawableLoader: AnimatedImageDrawableLoader
 ) : AbstractMarkwonPlugin() {
 
     override fun configureSpansFactory(builder: MarkwonSpansFactory.Builder) {
@@ -59,17 +59,26 @@ class ImagesPlugin private constructor(
                     disposable.dispose()
                 }
             }
-            return ImagesPlugin(imageLoader, coilStore)
+            return ImagesPlugin(
+                imageLoader = imageLoader,
+                coilStore = coilStore,
+                imageDrawableLoader = AnimatedImageDrawableLoader(
+                    resources = context.resources,
+                    coilStore = coilStore,
+                    imageLoader = imageLoader
+                )
+            )
         }
 
         class AnimatedImageDrawableLoader(
+            private val resources: Resources,
             private val coilStore: CoilStore,
             private val imageLoader: ImageLoader,
         ) : AsyncDrawableLoader() {
 
             override fun load(drawable: AsyncDrawable) {
                 val loaded = AtomicBoolean(false)
-                val target: Target = AnimatedDrawableTarget(drawable, loaded)
+                val target: Target = AnimatedDrawableTarget(drawable, loaded, resources)
                 val request = coilStore.load(drawable).newBuilder()
                     .target(target)
                     .build()
@@ -92,34 +101,41 @@ class ImagesPlugin private constructor(
 
             class AnimatedDrawableTarget(
                 private val drawable: AsyncDrawable,
-                private val loaded: AtomicBoolean
+                private val loaded: AtomicBoolean,
+                private val resources: Resources
             ) : Target {
-                override fun onSuccess(result: Drawable) {
+                override fun onSuccess(result: Image) {
+                    val loadedDrawable = result.asDrawable(resources)
+
                     if (cache.remove(drawable) != null || !loaded.get()) {
                         loaded.set(true)
                         if (drawable.isAttached) {
-                            DrawableUtils.applyIntrinsicBoundsIfEmpty(result)
-                            drawable.result = result
+                            DrawableUtils.applyIntrinsicBoundsIfEmpty(loadedDrawable)
+                            drawable.result = loadedDrawable
 
-                            if (result is Animatable) {
-                                (result as Animatable).start()
+                            if (loadedDrawable is Animatable) {
+                                (loadedDrawable as Animatable).start()
                             }
                         }
                     }
                 }
 
-                override fun onStart(placeholder: Drawable?) {
+                override fun onStart(placeholder: Image?) {
                     if (placeholder != null && drawable.isAttached) {
-                        DrawableUtils.applyIntrinsicBoundsIfEmpty(placeholder)
-                        drawable.result = placeholder
+                        val loadedDrawable = placeholder.asDrawable(resources)
+                        DrawableUtils.applyIntrinsicBoundsIfEmpty(loadedDrawable)
+                        drawable.result = loadedDrawable
                     }
                 }
 
-                override fun onError(error: Drawable?) {
+                override fun onError(error: Image?) {
+
                     if (cache.remove(drawable) != null) {
                         if (error != null && drawable.isAttached) {
-                            DrawableUtils.applyIntrinsicBoundsIfEmpty(error)
-                            drawable.result = error
+                            val loadedDrawable = error.asDrawable(resources)
+
+                            DrawableUtils.applyIntrinsicBoundsIfEmpty(loadedDrawable)
+                            drawable.result = loadedDrawable
                         }
                     }
                 }
