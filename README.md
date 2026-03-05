@@ -46,20 +46,22 @@ val markdownContent = """
 	* [Link](https://example.com)  
 	![Image](https://example.com/img.png)  
 	<a href="https://www.google.com/">Google</a>  
-"""
+""".trimIndent()
 
-//Minimal example
+// Make sure to add .trimIndent() either on variable string or on the variable declaration itself
+
+// Minimal example
 @Composable  
 fun MinimalExampleContent() {  
-    MarkdownText(markdown = markdownContent)  
+    MarkdownText(markdown = markdownContent.trimIndent())  
 } 
 
-//Complex example
+// Complex example
 @Composable  
 fun ComplexExampleContent() {  
      MarkdownText(
                 modifier = Modifier.padding(8.dp),
-                markdown = markdown,
+                markdown = markdown.trimIndent(),
                 maxLines = 3,
                 fontResource = R.font.montserrat_medium,
                 style = TextStyle(
