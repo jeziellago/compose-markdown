@@ -81,7 +81,8 @@ Thank you all for your contribution! ❤️
   <img src="https://contrib.rocks/image?repo=jeziellago/compose-markdown" />
 </a>
 
-
+## Stargazers over time
+[![Stargazers over time](https://starchart.cc/jeziellago/compose-markdown.svg?variant=adaptive)](https://starchart.cc/jeziellago/compose-markdown)
 
 # License
 ```  

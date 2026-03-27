@@ -1,18 +1,15 @@
 package dev.jeziellago.compose.markdowntext.plugins.image
 
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.text.Spanned
 import android.widget.TextView
 import androidx.test.core.app.ApplicationProvider
-import coil.ImageLoader
-import coil.request.Disposable
-import coil.request.ImageRequest
-import io.mockk.*
-import io.noties.markwon.AbstractMarkwonPlugin
+import coil3.ImageLoader
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import io.noties.markwon.MarkwonConfiguration
 import io.noties.markwon.MarkwonSpansFactory
-import io.noties.markwon.image.AsyncDrawable
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
