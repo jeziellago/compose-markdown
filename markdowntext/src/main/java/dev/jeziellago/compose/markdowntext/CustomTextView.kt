@@ -11,6 +11,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.graphics.withTranslation
+import androidx.core.text.getSpans
 import io.noties.markwon.core.spans.BlockQuoteSpan
 import io.noties.markwon.core.spans.CodeBlockSpan
 import io.noties.markwon.ext.tables.TableRowSpan
@@ -79,6 +80,9 @@ class CustomTextView : AppCompatTextView {
             Layout.Alignment.ALIGN_OPPOSITE ->
                 if (layoutDirection == LAYOUT_DIRECTION_LTR) ExplicitLayoutAlignment.RIGHT
                 else ExplicitLayoutAlignment.LEFT
+
+            // Default for Java null
+            else -> ExplicitLayoutAlignment.LEFT
         }
 
         val dx = when (explicitLayoutAlignment) {
@@ -171,7 +175,7 @@ class CustomTextView : AppCompatTextView {
     private fun containsLongMarkdown(): Boolean {
         // Do not wrap width when displaying markers needing full width (tables etc...)
         val spannable = if (text is Spannable) text as Spannable else SpannableString(text)
-        return spannable.getSpans(0, text.length, Object::class.java).any {
+        return spannable.getSpans<Any>(0, text.length).any {
             it is TableRowSpan || it is TableSpan || it is CodeBlockSpan || it is BlockQuoteSpan
         }
     }
