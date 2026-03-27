@@ -51,6 +51,7 @@ fun MarkdownText(
     headingBreakColor: Color = Color.Transparent,
     enableUnderlineForLink: Boolean = true,
     importForAccessibility: Int = View.IMPORTANT_FOR_ACCESSIBILITY_AUTO,
+    /** Enables text wrapping. See https://github.com/jeziellago/compose-markdown/pull/157 */
     wrapMultilineTextWidth: Boolean = false,
     beforeSetMarkdown: ((TextView, Spanned) -> Unit)? = null,
     afterSetMarkdown: ((TextView) -> Unit)? = null,
