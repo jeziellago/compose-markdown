@@ -115,17 +115,49 @@ fun TextView.applyTextSelectionColors(textSelectionColors: TextSelectionColors) 
 
 fun TextView.enableTextOverflow() {
     doOnNextLayout {
-        if (maxLines != -1 && lineCount > maxLines) {
-            val endOfLastLine = layout.getLineEnd(maxLines - 1)
-            val startIndex = maxOf(0, endOfLastLine - 3)
-            val spannedDropLast3Chars = text.subSequence(0, startIndex) as? Spanned
-            if (spannedDropLast3Chars != null) {
-                val spannableBuilder = SpannableStringBuilder()
-                    .append(spannedDropLast3Chars)
-                    .append("…")
-
-                text = spannableBuilder
+        try {
+            if (maxLines != -1 && lineCount > maxLines) {
+                val layout = layout ?: return@doOnNextLayout
+                
+                // Get the end index of the max lines allowed
+                val lineEndIndex = layout.getLineEnd(maxLines - 1)
+                
+                // Validate indices - prevent StringIndexOutOfBoundsException
+                if (lineEndIndex < 0 || lineEndIndex > text.length) {
+                    return@doOnNextLayout
+                }
+                
+                // Calculate safe truncation point accounting for ellipsis
+                val ellipsisWidth = paint.measureText("…")
+                var endIndex = lineEndIndex
+                
+                // Move back character by character until ellipsis fits
+                while (endIndex > 0) {
+                    val currentWidth = paint.measureText(text.subSequence(0, endIndex).toString())
+                    val availableWidth = layout.getLineWidth(maxLines - 1)
+                    
+                    if (currentWidth + ellipsisWidth <= availableWidth) {
+                        break
+                    }
+                    endIndex--
+                }
+                
+                // Ensure minimum content is kept (at least 1 character)
+                if (endIndex <= 0) {
+                    endIndex = 1
+                }
+                
+                // Safely truncate text and append ellipsis
+                val truncatedText = text.subSequence(0, endIndex) as? Spanned
+                if (truncatedText != null) {
+                    val spannableBuilder = SpannableStringBuilder()
+                        .append(truncatedText)
+                        .append("…")
+                    text = spannableBuilder
+                }
             }
+        } catch (_: Exception) {
+            // Fallback: keep original text if any error occurs during truncation
         }
     }
 }
