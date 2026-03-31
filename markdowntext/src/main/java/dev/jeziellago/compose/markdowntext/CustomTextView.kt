@@ -34,6 +34,7 @@ class CustomTextView : AppCompatTextView {
     private var extraPaddingRight: Int? = null
     private var isTextSelectable: Boolean = false
     var wrapMultilineTextWidth: Boolean = false
+    private var lastMeasureWidth = -1
 
     constructor(context: Context) :
             super(context, null, android.R.attr.textViewStyle)
@@ -47,14 +48,24 @@ class CustomTextView : AppCompatTextView {
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
 
+        val measuredWidth = MeasureSpec.getSize(widthMeasureSpec)
+
+        // If width changed significantly, recalculate layout
+        // This fixes rendering issues in LazyColumn where views are recycled
+        if (lastMeasureWidth != measuredWidth && measuredWidth > 0) {
+            lastMeasureWidth = measuredWidth
+            invalidate()
+            requestLayout()
+            return
+        }
+
         if (!layout.shouldWrap()) return
 
         val maxLineWidth = ceil(getMaxLineWidth(layout)).toInt()
         val uselessPaddingWidth = layout.width - maxLineWidth
-
-        val width = measuredWidth - uselessPaddingWidth
+        val wrappedWidth = measuredWidth - uselessPaddingWidth
         val height = measuredHeight
-        setMeasuredDimension(width, height)
+        setMeasuredDimension(wrappedWidth, height)
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -130,6 +141,29 @@ class CustomTextView : AppCompatTextView {
         return super.dispatchTouchEvent(event)
     }
 
+    public override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        // Clean up resources when view is recycled in LazyColumn
+        // This prevents text corruption when views are reused
+        resetTextState()
+    }
+
+    fun removeAllSpans() {
+        val text = text
+        if (text is Spannable) {
+            val spans = text.getSpans(0, text.length, Any::class.java)
+            for (span in spans) {
+                (text as? Spannable)?.removeSpan(span)
+            }
+        }
+    }
+
+    fun resetTextState() {
+        text = ""
+        removeAllSpans()
+        lastMeasureWidth = -1
+    }
+
     private fun getClickableSpans(event: MotionEvent): Array<ClickableSpan> {
         var x = event.x.toInt()
         var y = event.y.toInt()
@@ -140,11 +174,20 @@ class CustomTextView : AppCompatTextView {
         x += scrollX
         y += scrollY
 
-        val layout = layout
+        val layout = layout ?: return emptyArray()
+
+        if (y < 0 || y >= layout.height) {
+            return emptyArray()
+        }
+
         val line = layout.getLineForVertical(y)
+        if (line < 0 || line >= layout.lineCount) {
+            return emptyArray()
+        }
+
         val off = layout.getOffsetForHorizontal(line, x.toFloat())
 
-        val spannable = text as Spannable
+        val spannable = text as? Spannable ?: return emptyArray()
         return spannable.getSpans(off, off, ClickableSpan::class.java)
     }
 
