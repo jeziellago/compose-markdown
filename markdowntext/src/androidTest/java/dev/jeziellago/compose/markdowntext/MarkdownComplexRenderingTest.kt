@@ -1,9 +1,12 @@
 package dev.jeziellago.compose.markdowntext
 
+import android.app.Activity
 import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.text.Spannable
 import android.text.style.*
+import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -23,6 +26,8 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
+import androidx.test.runner.lifecycle.Stage
 import androidx.test.platform.app.InstrumentationRegistry
 import coil3.ImageLoader
 import coil3.request.crossfade
@@ -444,12 +449,22 @@ class MarkdownComplexRenderingTest {
 
         composeTestRule.onNodeWithTag("horizontal_rules").assertExists()
         composeTestRule.onNodeWithTag("horizontal_rules").assertIsDisplayed()
-        
-        onView(isAssignableFrom(TextView::class.java))
-            .check(matches(allOf(
-                isDisplayed(),
-                hasNonEmptyText()
-            )))
+        composeTestRule.waitForIdle()
+
+        composeTestRule.runOnIdle {
+            val activity = checkNotNull(getCurrentActivity()) {
+                "No resumed activity found for horizontal rule test"
+            }
+            val renderedTexts = findTextViews(activity.window.decorView)
+                .map { it.text.toString() }
+                .filter { it.isNotBlank() }
+
+            assert(renderedTexts.any { text ->
+                text.contains("Text before horizontal rule.") &&
+                    text.contains("Text after horizontal rule.") &&
+                    text.contains("Final section.")
+            })
+        }
     }
 
     @Test
@@ -821,5 +836,22 @@ class MarkdownComplexRenderingTest {
                 return false
             }
         }
+    }
+
+    private fun getCurrentActivity(): Activity? {
+        val resumedActivities = ActivityLifecycleMonitorRegistry.getInstance()
+            .getActivitiesInStage(Stage.RESUMED)
+        return resumedActivities.firstOrNull()
+    }
+
+    private fun findTextViews(root: View): List<TextView> {
+        if (root is TextView) return listOf(root)
+        if (root !is ViewGroup) return emptyList()
+
+        val textViews = mutableListOf<TextView>()
+        for (index in 0 until root.childCount) {
+            textViews += findTextViews(root.getChildAt(index))
+        }
+        return textViews
     }
 }
