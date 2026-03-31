@@ -9,7 +9,7 @@ Render Markdown inside Jetpack Compose with a single composable.
 
 This library wraps a `TextView`-based renderer in Compose so you can display rich Markdown content while still using familiar Compose modifiers and text styling.
 
-![Compose Markdown sample](example.png)
+[![Video]()](https://github.com/jeziellago/compose-markdown/assets/8452419/0e17e3d9-4eb1-44cb-8b63-5056fe74395e)
 
 ## Features
 
