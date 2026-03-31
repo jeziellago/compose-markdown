@@ -1,7 +1,8 @@
 package dev.jeziellago.compose.markdowntext.plugins.syntaxhighlight
 
-import io.mockk.*
-import io.noties.markwon.AbstractMarkwonPlugin
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import io.noties.markwon.MarkwonSpansFactory
 import io.noties.markwon.MarkwonVisitor
 import io.noties.markwon.core.factory.CodeSpanFactory
@@ -25,11 +26,6 @@ class SyntaxHighlightPluginTest {
     }
 
     @Test
-    fun `test plugin is instance of AbstractMarkwonPlugin`() {
-        assert(plugin is AbstractMarkwonPlugin)
-    }
-
-    @Test
     fun `test configureParser adds SyntaxHighlightExtension`() {
         every { mockParserBuilder.extensions(any()) } returns mockParserBuilder
 
@@ -40,11 +36,16 @@ class SyntaxHighlightPluginTest {
 
     @Test
     fun `test configureSpansFactory sets CodeSpanFactory for SyntaxHighlight`() {
-        every { mockSpansFactoryBuilder.setFactory(any<Class<out org.commonmark.node.Node>>(), any()) } returns mockSpansFactoryBuilder
+        every {
+            mockSpansFactoryBuilder.setFactory(
+                any<Class<out org.commonmark.node.Node>>(),
+                any()
+            )
+        } returns mockSpansFactoryBuilder
 
         plugin.configureSpansFactory(mockSpansFactoryBuilder)
 
-        verify { 
+        verify {
             mockSpansFactoryBuilder.setFactory(
                 SyntaxHighlight::class.java,
                 any<CodeSpanFactory>()
@@ -54,35 +55,15 @@ class SyntaxHighlightPluginTest {
 
     @Test
     fun `test configureVisitor sets up SyntaxHighlight node visitor`() {
-        every { mockVisitorBuilder.on(any<Class<out org.commonmark.node.Node>>(), any()) } returns mockVisitorBuilder
+        every {
+            mockVisitorBuilder.on(
+                any<Class<out org.commonmark.node.Node>>(),
+                any()
+            )
+        } returns mockVisitorBuilder
 
         plugin.configureVisitor(mockVisitorBuilder)
 
         verify { mockVisitorBuilder.on(SyntaxHighlight::class.java, any()) }
-    }
-
-    @Test
-    fun `test visitor behavior with mocked visitor`() {
-        val mockVisitor = mockk<MarkwonVisitor>(relaxed = true)
-        val mockSyntaxHighlight = mockk<SyntaxHighlight>(relaxed = true)
-
-        every { mockVisitor.length() } returns 0
-        every { mockVisitor.visitChildren(any()) } just Runs
-
-        val length = mockVisitor.length()
-        mockVisitor.visitChildren(mockSyntaxHighlight)
-
-        verify { mockVisitor.length() }
-        verify { mockVisitor.visitChildren(mockSyntaxHighlight) }
-    }
-
-    @Test
-    fun `test plugin creation and basic functionality`() {
-        val plugin1 = SyntaxHighlightPlugin()
-        val plugin2 = SyntaxHighlightPlugin()
-
-        assert(plugin1 !== plugin2)
-        assert(plugin1 is SyntaxHighlightPlugin)
-        assert(plugin2 is SyntaxHighlightPlugin)
     }
 }
