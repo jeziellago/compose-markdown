@@ -1,17 +1,111 @@
 package dev.jeziellago.compose.markdowntext
 
 import android.content.Context
+import android.graphics.Canvas
+import android.text.Layout
 import android.text.Selection
 import android.text.Spannable
+import android.text.SpannableString
 import android.text.style.ClickableSpan
+import android.util.AttributeSet
 import android.view.MotionEvent
-import android.view.View.MeasureSpec
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.graphics.withTranslation
+import androidx.core.text.getSpans
+import io.noties.markwon.core.spans.BlockQuoteSpan
+import io.noties.markwon.core.spans.CodeBlockSpan
+import io.noties.markwon.ext.tables.TableRowSpan
+import io.noties.markwon.ext.tables.TableSpan
+import kotlin.math.ceil
 
-class CustomTextView(context: Context) : AppCompatTextView(context) {
+/**
+ * This View contains a hack of the original TextView to fix the sizing issue of multiline text.
+ * When a text has multiple lines, the TextView forcefully sets the width to match_parent, even if
+ * the text layout does not span the whole width.
+ *
+ * The code comes from this article:
+ * https://medium.com/@mxdiland/android-textview-multiline-problem-61f8c3499bbb
+ */
+class CustomTextView : AppCompatTextView {
+    private enum class ExplicitLayoutAlignment {
+        LEFT, CENTER, RIGHT
+    }
 
+    private var extraPaddingRight: Int? = null
     private var isTextSelectable: Boolean = false
+    var wrapMultilineTextWidth: Boolean = false
     private var lastMeasureWidth = -1
+
+    constructor(context: Context) :
+            super(context, null, android.R.attr.textViewStyle)
+
+    constructor(context: Context, attrs: AttributeSet?) :
+            super(context, attrs, android.R.attr.textViewStyle)
+
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
+            super(context, attrs, defStyleAttr)
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+
+        val measuredWidth = MeasureSpec.getSize(widthMeasureSpec)
+
+        // If width changed significantly, recalculate layout
+        // This fixes rendering issues in LazyColumn where views are recycled
+        if (lastMeasureWidth != measuredWidth && measuredWidth > 0) {
+            lastMeasureWidth = measuredWidth
+            invalidate()
+            requestLayout()
+            return
+        }
+
+        if (!layout.shouldWrap()) return
+
+        val maxLineWidth = ceil(getMaxLineWidth(layout)).toInt()
+        val uselessPaddingWidth = layout.width - maxLineWidth
+        val wrappedWidth = measuredWidth - uselessPaddingWidth
+        val height = measuredHeight
+        setMeasuredDimension(wrappedWidth, height)
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        if (!layout.shouldWrap()) {
+            super.onDraw(canvas)
+            return
+        }
+
+        val layoutWidth = layout.width
+        val maxLineWidth = ceil(getMaxLineWidth(layout)).toInt()
+        if (layoutWidth == maxLineWidth) {
+            super.onDraw(canvas)
+            return
+        }
+
+        val explicitLayoutAlignment = when (layout.alignment) {
+            Layout.Alignment.ALIGN_CENTER -> ExplicitLayoutAlignment.CENTER
+
+            Layout.Alignment.ALIGN_NORMAL ->
+                if (layoutDirection == LAYOUT_DIRECTION_LTR) ExplicitLayoutAlignment.LEFT
+                else ExplicitLayoutAlignment.RIGHT
+
+            Layout.Alignment.ALIGN_OPPOSITE ->
+                if (layoutDirection == LAYOUT_DIRECTION_LTR) ExplicitLayoutAlignment.RIGHT
+                else ExplicitLayoutAlignment.LEFT
+
+            // Default for Java null
+            else -> ExplicitLayoutAlignment.LEFT
+        }
+
+        val dx = when (explicitLayoutAlignment) {
+            ExplicitLayoutAlignment.RIGHT -> -1 * (layoutWidth - maxLineWidth)
+            ExplicitLayoutAlignment.CENTER -> -1 * (layoutWidth - maxLineWidth) / 2
+            else -> 0
+        }
+        drawTranslatedHorizontally(canvas, dx) { super.onDraw(it) }
+    }
+
+    override fun getCompoundPaddingRight(): Int =
+        extraPaddingRight ?: super.getCompoundPaddingRight()
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         performClick()
@@ -45,20 +139,6 @@ class CustomTextView(context: Context) : AppCompatTextView(context) {
             }
         }
         return super.dispatchTouchEvent(event)
-    }
-
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-
-        val width = MeasureSpec.getSize(widthMeasureSpec)
-
-        // If width changed significantly, recalculate layout
-        // This fixes rendering issues in LazyColumn where views are recycled
-        if (lastMeasureWidth != width && width > 0) {
-            lastMeasureWidth = width
-            invalidate()
-            requestLayout()
-        }
     }
 
     public override fun onDetachedFromWindow() {
@@ -118,5 +198,28 @@ class CustomTextView(context: Context) : AppCompatTextView(context) {
     override fun setTextIsSelectable(selectable: Boolean) {
         super.setTextIsSelectable(selectable)
         isTextSelectable = selectable
+    }
+
+    private fun getMaxLineWidth(layout: Layout): Float =
+        (0 until layout.lineCount).maxOfOrNull { layout.getLineWidth(it) } ?: 0.0f
+
+    private fun drawTranslatedHorizontally(canvas: Canvas, dx: Int, onDraw: (Canvas) -> Unit) {
+        extraPaddingRight = dx
+        canvas.withTranslation(dx.toFloat(), 0f) {
+            onDraw.invoke(this)
+            extraPaddingRight = null
+        }
+    }
+
+    private fun Layout?.shouldWrap(): Boolean {
+        return this != null && lineCount > 1 && wrapMultilineTextWidth && !containsLongMarkdown()
+    }
+
+    private fun containsLongMarkdown(): Boolean {
+        // Do not wrap width when displaying markers needing full width (tables etc...)
+        val spannable = if (text is Spannable) text as Spannable else SpannableString(text)
+        return spannable.getSpans<Any>(0, text.length).any {
+            it is TableRowSpan || it is TableSpan || it is CodeBlockSpan || it is BlockQuoteSpan
+        }
     }
 }

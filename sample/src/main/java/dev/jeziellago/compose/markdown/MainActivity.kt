@@ -6,9 +6,13 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
@@ -383,6 +387,35 @@ private fun SampleMarkdown() {
                             )
                         }",
                     )
+                }
+
+                item {
+                    Surface(
+                        shape = RoundedCornerShape(32.dp), color = Color.LightGray
+                    ) {
+                        MarkdownText(
+                            modifier = Modifier.padding(PaddingValues(vertical = 12.dp, horizontal = 16.dp)),
+                            markdown = """
+                            **Unwrapped** `text` _with_ a reallyreallyreallyverylonglongword
+                            """.trimIndent()
+                        )
+                    }
+                }
+
+                item{ Spacer(Modifier.height(4.dp))}
+
+                item {
+                    Surface(
+                        shape = RoundedCornerShape(32.dp), color = Color.LightGray
+                    ) {
+                        MarkdownText(
+                            modifier = Modifier.padding(PaddingValues(vertical = 12.dp, horizontal = 16.dp)),
+                            wrapMultilineTextWidth = true,
+                            markdown = """
+                            **Wrapped** `text` _with_ a reallyreallyreallyverylonglongword
+                            """.trimIndent()
+                        )
+                    }
                 }
             }
         }
