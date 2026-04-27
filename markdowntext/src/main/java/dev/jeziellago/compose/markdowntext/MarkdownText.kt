@@ -52,6 +52,8 @@ fun MarkdownText(
     headingBreakColor: Color = Color.Transparent,
     enableUnderlineForLink: Boolean = true,
     importForAccessibility: Int = View.IMPORTANT_FOR_ACCESSIBILITY_AUTO,
+    /** Enables text wrapping. See https://github.com/jeziellago/compose-markdown/pull/157 */
+    wrapMultilineTextWidth: Boolean = false,
     beforeSetMarkdown: ((TextView, Spanned) -> Unit)? = null,
     afterSetMarkdown: ((TextView) -> Unit)? = null,
     onLinkClicked: ((String) -> Unit)? = null,
@@ -104,7 +106,7 @@ fun MarkdownText(
 
                     setMaxLines(maxLines)
                     setLinkTextColor(linkTextColor.toArgb())
-
+                    this.wrapMultilineTextWidth = wrapMultilineTextWidth
                     setTextIsSelectable(isTextSelectable)
                     setOnBlockClickListener(onClick)
                     setLinkClicksEnabled(!disableLinkMovementMethod)
@@ -149,6 +151,7 @@ fun MarkdownText(
                         fontWeight?.let { applyFontWeight(it) }
                     }
                 }
+                textView.wrapMultilineTextWidth = wrapMultilineTextWidth
                 textView.setTextIsSelectable(isTextSelectable)
                 textView.setOnBlockClickListener(onClick)
                 textView.setLinkClicksEnabled(!disableLinkMovementMethod)
