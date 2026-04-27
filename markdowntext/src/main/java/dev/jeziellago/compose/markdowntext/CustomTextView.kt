@@ -9,6 +9,8 @@ import android.text.SpannableString
 import android.text.style.ClickableSpan
 import android.util.AttributeSet
 import android.view.MotionEvent
+import android.view.View.MeasureSpec
+import android.view.ViewConfiguration
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.graphics.withTranslation
 import androidx.core.text.getSpans
@@ -35,6 +37,14 @@ class CustomTextView : AppCompatTextView {
     private var isTextSelectable: Boolean = false
     var wrapMultilineTextWidth: Boolean = false
     private var lastMeasureWidth = -1
+    private var onBlockClick: (() -> Unit)? = null
+    private var areLinkClicksEnabled: Boolean = true
+    private val touchSlop = ViewConfiguration.get(context).scaledTouchSlop
+    private var downX = 0f
+    private var downY = 0f
+    private var hasMoved = false
+    private var didLongPress = false
+    private var didPerformClickForCurrentGesture = false
 
     constructor(context: Context) :
             super(context, null, android.R.attr.textViewStyle)
@@ -108,22 +118,51 @@ class CustomTextView : AppCompatTextView {
         extraPaddingRight ?: super.getCompoundPaddingRight()
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        performClick()
-        if (isTextSelectable) {
-            return super.onTouchEvent(event)
-        } else {
-            if (event.action == MotionEvent.ACTION_UP || event.action == MotionEvent.ACTION_DOWN) {
-                val link = getClickableSpans(event)
-
-                if (link.isNotEmpty()) {
-                    if (event.action == MotionEvent.ACTION_UP) {
-                        link[0].onClick(this)
-                    }
-                    return true
+        when (event.actionMasked) {
+            MotionEvent.ACTION_DOWN -> {
+                downX = event.x
+                downY = event.y
+                hasMoved = false
+                didLongPress = false
+                didPerformClickForCurrentGesture = false
+            }
+            MotionEvent.ACTION_MOVE -> {
+                if (!hasMoved) {
+                    val deltaX = kotlin.math.abs(event.x - downX)
+                    val deltaY = kotlin.math.abs(event.y - downY)
+                    hasMoved = deltaX > touchSlop || deltaY > touchSlop
                 }
             }
-            return false
         }
+
+        if (areLinkClicksEnabled &&
+            (event.action == MotionEvent.ACTION_UP || event.action == MotionEvent.ACTION_DOWN)
+        ) {
+            val link = getClickableSpans(event)
+
+            if (link.isNotEmpty()) {
+                if (event.action == MotionEvent.ACTION_UP) {
+                    link[0].onClick(this)
+                }
+                return true
+            }
+        }
+
+        if (isTextSelectable) {
+            val handledBySuper = super.onTouchEvent(event)
+            if (event.actionMasked == MotionEvent.ACTION_UP &&
+                !didLongPress &&
+                !hasMoved &&
+                selectionStart == selectionEnd &&
+                !didPerformClickForCurrentGesture
+            ) {
+                performClick()
+                return true
+            }
+            return handledBySuper
+        }
+
+        return false
     }
 
     override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
@@ -192,12 +231,28 @@ class CustomTextView : AppCompatTextView {
     }
 
     override fun performClick(): Boolean {
-        return super.performClick()
+        didPerformClickForCurrentGesture = true
+        val handledBySuper = super.performClick()
+        onBlockClick?.invoke()
+        return handledBySuper || onBlockClick != null
+    }
+
+    override fun performLongClick(): Boolean {
+        didLongPress = true
+        return super.performLongClick()
     }
 
     override fun setTextIsSelectable(selectable: Boolean) {
         super.setTextIsSelectable(selectable)
         isTextSelectable = selectable
+    }
+
+    fun setOnBlockClickListener(listener: (() -> Unit)?) {
+        onBlockClick = listener
+    }
+
+    fun setLinkClicksEnabled(enabled: Boolean) {
+        areLinkClicksEnabled = enabled
     }
 
     private fun getMaxLineWidth(layout: Layout): Float =

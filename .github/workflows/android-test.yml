@@ -35,8 +35,25 @@ concurrency:
 
 jobs:
   build:
+    name: ${{ matrix.name }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: full-api-29
+            api-level: 29
+            profile: pixel_2
+            test-command: ./gradlew :markdowntext:connectedDebugAndroidTest --stacktrace
+          - name: smoke-api-23
+            api-level: 23
+            profile: pixel_2
+            test-command: ./gradlew :markdowntext:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=dev.jeziellago.compose.markdowntext.MarkdownTextViewInstrumentedTest --stacktrace
+          - name: smoke-api-36
+            api-level: 36
+            profile: pixel_2
+            test-command: ./gradlew :markdowntext:connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=dev.jeziellago.compose.markdowntext.MarkdownTextViewInstrumentedTest --stacktrace
 
     steps:
       - uses: actions/checkout@v4
@@ -51,29 +68,35 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
       - name: Run instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 29
+          api-level: ${{ matrix.api-level }}
           arch: x86_64
-          profile: Nexus 6
+          profile: ${{ matrix.profile }}
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           script: |
-            bash -o pipefail -c './gradlew :markdowntext:connectedDebugAndroidTest 2>&1 | tee gradle-connectedDebugAndroidTest.log'
+            bash -o pipefail -c '${{ matrix.test-command }} 2>&1 | tee gradle-connectedDebugAndroidTest-${{ matrix.name }}.log'
             test_status=$?
-            adb logcat -d > android-logcat.txt || true
+            adb logcat -d > android-logcat-${{ matrix.name }}.txt || true
             exit $test_status
 
       - name: Upload Android test artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: android-test-artifacts
+          name: android-test-artifacts-${{ matrix.name }}
           if-no-files-found: warn
           path: |
-            gradle-connectedDebugAndroidTest.log
-            android-logcat.txt
+            gradle-connectedDebugAndroidTest-${{ matrix.name }}.log
+            android-logcat-${{ matrix.name }}.txt
             markdowntext/build/reports/androidTests/
             markdowntext/build/outputs/androidTest-results/
             markdowntext/build/outputs/connected_android_test_additional_output/
