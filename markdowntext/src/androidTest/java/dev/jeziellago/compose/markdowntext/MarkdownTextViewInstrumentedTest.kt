@@ -219,6 +219,28 @@ class MarkdownTextViewInstrumentedTest {
     }
 
     @Test
+    fun testSelectableTextViewClickable() {
+        val markdown = "Selectable clickable text"
+        var clicked = false
+
+        composeTestRule.setContent {
+            MaterialTheme {
+                MarkdownText(
+                    markdown = markdown,
+                    modifier = Modifier.testTag("selectable_clickable_text"),
+                    isTextSelectable = true,
+                    onClick = { clicked = true }
+                )
+            }
+        }
+
+        composeTestRule.onNodeWithTag("selectable_clickable_text").assertExists()
+        composeTestRule.onNodeWithTag("selectable_clickable_text").performClick()
+
+        assert(clicked)
+    }
+
+    @Test
     fun testMarkdownHeadingRendering() {
         val markdown = "# Heading Text"
         

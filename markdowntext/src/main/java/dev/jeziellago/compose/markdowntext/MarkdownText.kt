@@ -77,14 +77,14 @@ fun MarkdownText(
             )
         }
 
-    val androidViewModifier = if (onClick != null) {
+    val androidViewModifier = if (onClick != null && !isTextSelectable) {
         Modifier
             .clickable { onClick() }
             .then(modifier)
     } else {
         modifier
     }
-    
+
     // Create a stable key based on markdown content hash for proper LazyColumn recycling
     val contentKey = remember(markdown) {
         markdown.hashCode()
@@ -106,8 +106,14 @@ fun MarkdownText(
                     setLinkTextColor(linkTextColor.toArgb())
 
                     setTextIsSelectable(isTextSelectable)
+                    setOnBlockClickListener(onClick)
+                    setLinkClicksEnabled(!disableLinkMovementMethod)
 
-                    movementMethod = LinkMovementMethod.getInstance()
+                    movementMethod = if (disableLinkMovementMethod) {
+                        null
+                    } else {
+                        LinkMovementMethod.getInstance()
+                    }
 
                     if (truncateOnTextOverflow) enableTextOverflow()
 
@@ -143,9 +149,14 @@ fun MarkdownText(
                         fontWeight?.let { applyFontWeight(it) }
                     }
                 }
+                textView.setTextIsSelectable(isTextSelectable)
+                textView.setOnBlockClickListener(onClick)
+                textView.setLinkClicksEnabled(!disableLinkMovementMethod)
                 markdownRender.setMarkdown(textView, markdown)
-                if (disableLinkMovementMethod) {
-                    textView.movementMethod = null
+                textView.movementMethod = if (disableLinkMovementMethod) {
+                    null
+                } else {
+                    LinkMovementMethod.getInstance()
                 }
                 if (onTextLayout != null) {
                     textView.post {
