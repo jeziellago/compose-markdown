@@ -432,6 +432,42 @@ private fun SampleMarkdown() {
                         )
                     }
                 }
+
+                item {
+                    MarkdownText(
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .fillMaxWidth(),
+                        enableBlockLevelAccessibility = false,
+                        markdown = """
+                            ## Block-Level Accessibility Disabled
+                            
+                            First paragraph: TalkBack will see this entire block as one single node.
+                            
+                            Second paragraph: Even though there are multiple paragraphs here, accessibility services will announce them together.
+                            
+                            Third paragraph: This is the default behavior for compatibility with existing apps.
+                        """.trimIndent()
+                    )
+                }
+
+                item {
+                    MarkdownText(
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .fillMaxWidth(),
+                        enableBlockLevelAccessibility = true,
+                        markdown = """
+                            ## Block-Level Accessibility Enabled
+                            
+                            First paragraph: TalkBack will now see this as a separate block and allow you to navigate to it individually.
+                            
+                            Second paragraph: Each paragraph becomes its own accessibility node that TalkBack can focus on.
+                            
+                            Third paragraph: This makes navigation much easier for users with screen readers when dealing with longer markdown documents.
+                        """.trimIndent()
+                    )
+                }
             }
         }
     }

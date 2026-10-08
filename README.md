@@ -145,6 +145,7 @@ Some of the most useful parameters exposed by `MarkdownText`:
 - `enableSoftBreakAddsNewLine`: treat soft breaks as new lines
 - `headingBreakColor`: customize heading divider color
 - `enableUnderlineForLink`: turn link underlines on or off
+- `enableBlockLevelAccessibility`: expose virtual accessibility nodes per text block for TalkBack (default: false)
 - `onTextLayout`: observe rendered line count
 
 ## Advanced Example
@@ -179,6 +180,58 @@ fun InteractiveMarkdown() {
     )
 }
 ```
+
+## Accessibility: Block-Level TalkBack
+
+By default, TalkBack announces the entire markdown content as a single node. Enable `enableBlockLevelAccessibility` to expose individual text blocks (paragraphs, lists, code blocks, etc.) as separate accessibility nodes, allowing users to navigate and interact with specific blocks.
+
+### Example: Disabled (default behavior)
+
+```kotlin
+import androidx.compose.runtime.Composable
+import dev.jeziellago.compose.markdowntext.MarkdownText
+
+@Composable
+fun DefaultAccessibility() {
+    MarkdownText(
+        markdown = """
+            # Heading
+            
+            First paragraph with some content.
+            
+            Second paragraph with more details.
+            
+            Third paragraph to wrap up.
+        """.trimIndent(),
+        enableBlockLevelAccessibility = false  // TalkBack sees one big text node
+    )
+}
+```
+
+### Example: Enabled (block-level accessibility)
+
+```kotlin
+import androidx.compose.runtime.Composable
+import dev.jeziellago.compose.markdowntext.MarkdownText
+
+@Composable
+fun BlockLevelAccessibility() {
+    MarkdownText(
+        markdown = """
+            # Heading
+            
+            First paragraph with some content.
+            
+            Second paragraph with more details.
+            
+            Third paragraph to wrap up.
+        """.trimIndent(),
+        enableBlockLevelAccessibility = true  // TalkBack navigates each block separately
+    )
+}
+```
+
+When `enableBlockLevelAccessibility = true`, TalkBack focuses each block individually, including headings, paragraphs, and table cells. Links inside table cells are exposed as actionable nodes for both Markdown links and auto-linkified URLs.
 
 ## Sample App
 

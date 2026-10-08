@@ -57,7 +57,8 @@ fun MarkdownText(
     beforeSetMarkdown: ((TextView, Spanned) -> Unit)? = null,
     afterSetMarkdown: ((TextView) -> Unit)? = null,
     onLinkClicked: ((String) -> Unit)? = null,
-    onTextLayout: ((numLines: Int) -> Unit)? = null
+    onTextLayout: ((numLines: Int) -> Unit)? = null,
+    enableBlockLevelAccessibility: Boolean = false,
 ) {
     val defaultColor: Color = LocalContentColor.current
     val context: Context = LocalContext.current
@@ -110,6 +111,7 @@ fun MarkdownText(
                     setTextIsSelectable(isTextSelectable)
                     setOnBlockClickListener(onClick)
                     setLinkClicksEnabled(!disableLinkMovementMethod)
+                    setBlockLevelAccessibilityEnabled(enableBlockLevelAccessibility)
 
                     movementMethod = if (disableLinkMovementMethod) {
                         null
@@ -155,6 +157,7 @@ fun MarkdownText(
                 textView.setTextIsSelectable(isTextSelectable)
                 textView.setOnBlockClickListener(onClick)
                 textView.setLinkClicksEnabled(!disableLinkMovementMethod)
+                textView.setBlockLevelAccessibilityEnabled(enableBlockLevelAccessibility)
                 markdownRender.setMarkdown(textView, markdown)
                 textView.movementMethod = if (disableLinkMovementMethod) {
                     null
