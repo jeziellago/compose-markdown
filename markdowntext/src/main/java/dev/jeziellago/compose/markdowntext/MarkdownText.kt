@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.widget.TextViewCompat
@@ -92,7 +93,7 @@ fun MarkdownText(
     val contentKey = remember(markdown) {
         markdown.hashCode()
     }
-    
+
     key(contentKey) {
         AndroidView(
             modifier = androidViewModifier,
@@ -121,6 +122,7 @@ fun MarkdownText(
 
                     if (truncateOnTextOverflow) enableTextOverflow()
 
+                    setIncludeFontPadding(style.platformStyle?.paragraphStyle?.includeFontPadding == true)
                     autoSizeConfig?.let { config ->
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(
@@ -170,6 +172,7 @@ fun MarkdownText(
                     }
                 }
                 textView.maxLines = maxLines
+                textView.setIncludeFontPadding(style.platformStyle?.paragraphStyle?.includeFontPadding == true)
             }
         )
     }
